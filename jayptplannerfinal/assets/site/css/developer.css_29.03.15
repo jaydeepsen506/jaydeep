@@ -1,0 +1,354 @@
+.chosen-choices .search-field .default{
+    height: 42px !important;
+    width:167px !important;
+    }
+#member_chosen{
+    width: 100% !important;
+}
+#trainer_chosen{
+    width: 100% !important;
+}
+#clients_chosen{
+    width: 100% !important;
+}
+
+.address .col-xs-6.text-right > a {
+    display: block;
+    margin-top: 7px;
+}
+/*soumojit css (06.05.15)*/
+.lowerlinks, .lowerlinkswh {
+	text-align: left !important;
+}
+.avilable {
+	font-size: 15px;
+}
+.datehead {
+	font-size: 17px;
+}
+/*** 07.05.15**/
+.cncl-btn {
+    	background-color: gray;
+        float: right;
+        border: none;
+        margin-right: 10px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	background-repeat: no-repeat;
+	background-position: 30px center;
+	width: 166px !important;
+	margin: 0 auto;
+	height: 34px;
+	line-height: 35px !important;
+	padding: 0 !important;
+	padding-left: 50px!important;
+	display: inline-block;
+	color: #ffffff !important;
+	font-size: 14px !important;
+	text-align: left;
+	box-shadow: 0 2px #2789cb;
+	-moz-box-shadow: 0 2px #2789cb;
+	-webkit-box-shadow: 0 3px #73777A;
+	font-family:'HelveticaNeue-Regular' !important;
+	text-transform: none !important;
+}
+.repeat-main{
+    float: left;
+    width: 100%;
+}
+
+/*soumojit css(08.05.15)*/
+.messagecount {
+	font-size: 11px;
+}
+.tab-outer .tab-header .messagecount {
+	line-height: 18px;
+}
+.listing-left h5 {
+	font-size: 16px;
+}
+.listing-left h4 {
+	font-size: 18px;
+}
+.del.add-bg {
+	background: #22a7f0;
+	border-radius: 50%;
+    font-size: 11px;
+    height: 25px;
+    line-height: 24px;
+    text-align: center;
+    width: 25px;
+	
+}
+.del.add-bg .fa-trash-o, .crea.add-bg .fa-pencil {
+	color: #fff;
+	text-align: center;
+}
+.add-bg {
+	background: #98c23e;
+	border-radius: 50%;
+    font-size: 11px;
+    height: 25px;
+    line-height: 24px;
+    text-align: center;
+    width: 25px;
+    margin: 0 3px;
+}
+.notohead, .Earlier {
+	font-size: 12px;
+}
+.bookhead {
+	font-size: 16px;
+}
+.afterhead {
+	font-size: 12px;
+	line-height: 19px;
+}
+.bookable {
+	font-size: 12px;
+	margin-bottom: 3px;
+}
+.lowerlinks li a {
+	font-size: 13px;
+}
+
+/*somumojit css starts (12.05.15)*/
+#myTab a {
+    transition: none 0s ease 0s ;
+}
+.add-bg img {
+    width: 11px;
+}
+.inboxpanel .del {
+	width: auto;
+}
+.progress_title .fa-repeat, .progress_title .fa-remove {
+	margin-right: 5px;
+}
+.exc:before {
+	height: 12px;
+	width: 12px;
+	background-size: 12px auto;
+}
+
+.bootstrap-switch {
+	height: 28px;
+	font-size: 13px;
+}
+.bootstrap-switch-handle-off::before {
+	 border: 6px solid transparent;
+	 top: 0px;
+}
+.switch-wrapper {
+	margin-right: 10px;
+}
+.lowerlinkswh li {
+	padding: 4px 25px;
+}
+.edit_img{
+    position: relative;
+}
+.edit_img:before{
+    position:absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height:100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    content:'';
+    opacity:0;
+}
+a.remove_img{
+    position:absolute;
+    top:3px;
+    right:3px;
+    font-size: 20px;
+    display: none;
+    color:#fff;
+    z-index: 9;
+}
+.edit_img:hover a.remove_img{
+    display: block;
+    color:#fff;
+}
+.edit_img:hover:before{
+    opacity: 1;
+}
+
+.unit a{
+  
+    color: #565656;
+    cursor: pointer;
+    background-color: transparent;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    width: 27px;
+height: 27px;
+font-weight: 400;
+border-radius: 50%;
+-webkit-border-radius: 50%;
+-moz-border-radius: 50%
+ color: #282828;
+ text-decoration: none;
+}
+
+.calendar .days .unit.active b a{
+    color: #fff;
+}
+
+.lighttxtmeal {
+    font-family:'HelveticaNeue-Light';
+}
+.organictxt {
+    border-top: 1px solid #f7f8f9;
+   /* border-bottom: 1px solid #f7f8f9;*/
+    padding: 8px 0;
+    /*margin: 15px 0 10px;*/
+    position: relative;
+}
+.singleorga {
+    overflow: hidden;
+}
+.txtfloat {
+    color: #282828;
+    font-size: 15px;
+    font-weight: 300;
+    min-width: 120px;
+    float: left;
+}
+.txtfloat2 {
+    color: #22a7f0;
+    font-size: 15px;
+    font-weight: 300;
+    min-width: 120px;
+    float: left;
+}
+.removetxtxr {
+    position: absolute;
+    right: 30px;
+    top: 35%;
+}
+.table-outer-edit {
+    min-height: 180px;
+}
+.txt-box-set-new {
+    height: 25px !important;
+    margin-bottom: 3px;
+    width: 95px !important;
+}
+
+.load_cats{
+    max-height: 350px;
+    overflow-y: scroll;
+}
+.connectedSortable{
+ max-height: 350px;
+    overflow-y: scroll;
+    padding: 0;
+}
+.connectedSortable li{
+    list-style-type: none;
+}
+
+.editright .butsblue{
+    width: 67px !important;
+    background-position: 10px center;
+    line-height: 36px !important;
+    padding-left: 30px!important;
+}
+.connectedSortable .workouttxt{
+    line-height: 64px;
+}
+
+.connectedSortable .panel-body{
+    padding: 0;
+}
+
+#program_value .panel-body{
+    padding: 0 10px !important;
+}
+
+
+#tramnning .innerblog {
+    min-height: 0 !important;
+}
+
+
+/*soumojit css starts (26.06.15)*/
+
+.bookarea {
+	left: 0;
+}
+
+
+.editright {
+	padding: 22px 0;
+}
+.exc:before {
+	width: 11px !important;
+	height: 11px !important; 
+	top: 1px;
+}
+/*.listcell {
+	height: 42px;
+}*/
+.inboxpanel .del.iconcom {
+	width: 25px;
+	height: 25px;
+}
+.add-bg.srch-ico {
+	background: none;
+}
+
+.whole_msg {
+    height: 500px;
+    overflow-y: scroll;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,750 @@
+<?php
+class Toolbox extends CI_Controller {
+
+	public function __construct()
+	{
+		parent::__construct();
+		
+		if(!$this->session->userdata('is_site_logged_in')){
+			redirect('home');
+		}
+		// load models
+		$this->load->model('sitesetting_model');
+		$this->load->model('contactsetting_model');
+		$this->load->model('common_model');
+		$this->load->model('network_model');
+                $this->load->model('toolbox_model');
+	}
+	function index()
+	{
+		$header['settings'] =$this->sitesetting_model->get_settings();
+		// load HTML header file
+		$this->load->view('HTML_header');
+		// load header file
+		$this->load->view('header',$header);
+		// load template
+		$data['meals']=$this->toolbox_model->get_meals();
+		$data['meal_one_record']=$this->toolbox_model->get_meals_one_record();
+		$data['program_list']=$this->toolbox_model->get_programs();
+		$this->load->view('toolbox_training',$data);
+		// load HTML footer file
+		$this->load->view('footer');
+		
+		// load HTML footer file
+		$this->load->view('HTML_footer');
+	}
+	public function get_more_div()
+	{
+	    $data['count']=$this->input->post('count');
+	    $this->load->view('get_more_div',$data);
+	}
+	public function add_meal() /////// Function for adding meal and other meal informations
+	{
+	   if($this->input->server('REQUEST_METHOD') == 'POST')
+	    {
+	         $meal_title=$this->input->post('meal_title');
+		 $meal_desc=$this->input->post('meal_desc');
+		 $specifically=$this->input->post('specifically');
+		 $meal_amount=$this->input->post('meal_amount');
+		 $instruction=$this->input->post('instruction');
+		 $meal_attachment=$this->input->post('uploaded_image_name');
+		 $meal_arr=explode(",",$meal_attachment);
+		 $meal_data=array(
+			'title' => $meal_title,
+			'description' => $meal_desc,
+			'instruction' => $instruction
+				  );
+		 $add_meal_res=$this->common_model->add('meal',$meal_data);
+		 if($add_meal_res != 0)
+		 {
+		      for($i=1;$i<sizeof($meal_arr);$i++)
+		       {
+			   $data_meal_attachment=array(
+				'meal_id' => $add_meal_res,
+				'filename' => $meal_arr[$i]
+						       );
+			   
+			  $add_attach_res=$this->common_model->add('meal_images',$data_meal_attachment);
+		       }
+				for($i=0;$i<sizeof($specifically);$i++)
+				{
+				  $data_other_option=array(
+					  'meal_id' => $add_meal_res,
+					  'specifically' => $specifically[$i],
+					  'amount' => $meal_amount[$i]
+								 );
+				  $add_other_res=$this->common_model->add('meal_other_options',$data_other_option);
+				}
+		     
+		 }
+	    }
+	    redirect('tools');
+	}
+	public function image_upload()
+	{
+		$arr="";
+                foreach ($_FILES["file"]["error"] as $key => $error){
+			if ($error == UPLOAD_ERR_OK){
+			  $time=time();  // time on creation
+			  $random_num=rand(00,99);  // random number
+			  $name = $time.$random_num.$_FILES["file"]["name"][$key]; // avoid same file name collision
+			if(move_uploaded_file( $_FILES["file"]["tmp_name"][$key], getcwd()."/meal_images/" . $name))
+			{
+			//mysql_query("INSERT INTO images VALUES('','$name','$user_session_id','$time')");
+			 $arr=$arr.$name.",";
+			}
+			else
+			 {
+			   echo "0";
+			   exit;
+			 }
+	                 }
+                }
+                echo $arr;
+	}
+	
+	public function get_edit_popup()
+	{
+	        $meal_id=$this->input->post('meal_id');
+		$where_meal=array(
+		'id' => $meal_id
+		     );
+	        $data['meal_info']=$this->common_model->get('meal',array('*'),$where_meal);
+		$where_meal_other=array(
+		'meal_id' => $meal_id
+		     );
+		$data['meal_others']=$this->common_model->get('meal_other_options',array('*'),$where_meal_other,null,null,null,null,null,null,'id','asc');
+		$where_meal_image=array(
+		'meal_id' => $meal_id
+		     );
+		$data['meal_images']=$this->common_model->get('meal_images',array('*'),$where_meal_image);
+		$this->load->view('edit_meal',$data);
+	}
+	
+	public function remove_meal_others()
+	{
+		$field_id=$this->input->post('field_id');
+		$where=array(
+			'id' => $field_id
+			     );
+		$del_res=$this->common_model->delete('meal_other_options',$where);
+		if($del_res)
+		{
+			echo "deleted";
+		}
+		else{
+			echo "not_deleted";
+		}
+	}
+	
+	public function update_meals()
+	{
+		if($this->input->server('REQUEST_METHOD') == 'POST')
+	        {
+			$meal_title=$this->input->post('meal_title_edit');
+			$meal_desc=$this->input->post('meal_desc_edit');
+			$instruction=$this->input->post('instruction_edit');
+			$meal_id=$this->input->post('meal_id');
+			$meal_other_id=$this->input->post('meal_other_id');
+			$specifically=$this->input->post('specifically_edit');
+		        $meal_amount=$this->input->post('meal_amount_edit');
+			$meal_attachment=$this->input->post('uploaded_image_name_edit');
+		        $meal_arr=explode(",",$meal_attachment);
+			$data_meal_updt=array(
+				'title' => $meal_title,
+				'description' => $meal_desc,
+				'instruction' => $instruction
+					      );
+			$where_meal=array(
+				'id' =>  $meal_id
+					  );
+			$update_res=$this->common_model->update('meal',$data_meal_updt,$where_meal);
+			if($update_res)
+			{
+				if(count($meal_arr) > 1)
+				{
+					for($i=1;$i<sizeof($meal_arr);$i++)
+				       {
+					   $data_meal_attachment=array(
+						'meal_id' => $meal_id,
+						'filename' => $meal_arr[$i]
+								       );
+					   
+					  $add_attach_res=$this->common_model->add('meal_images',$data_meal_attachment);
+				       }
+				}
+				if(count($meal_other_id) > 0)
+				{
+				   for($i=0;$i<sizeof($meal_other_id);$i++)
+					{
+						if($meal_other_id[$i]!='')
+						{
+							$data_other_update=array(
+								'meal_id' => $meal_id,
+								'specifically' => $specifically[$i],
+								'amount' => $meal_amount[$i]
+										 );
+							$where_other=array(
+								'id' => $meal_other_id[$i]
+									   );
+							$update_other_res=$this->common_model->update('meal_other_options',$data_other_update,$where_other);
+						}
+						elseif($meal_other_id[$i]=='')
+						{
+							$data_other_option=array(
+								'meal_id' => $meal_id,
+								'specifically' => $specifically[$i],
+								'amount' => $meal_amount[$i]
+										       );
+							$add_other_res=$this->common_model->add('meal_other_options',$data_other_option);
+						}
+					}
+				}
+			}
+			redirect('tools');
+		}
+		
+	}
+	public function get_more_div_edit()
+	{
+	    $data['count']=$this->input->post('count');
+	    $this->load->view('get_more_div_edit',$data);
+	}
+	public function get_meal_list_ajax()
+	{
+		$search_text=$this->input->post('search_text');
+	        if($search_text=='')
+		{
+		    $data['meals']=$this->common_model->get('meal',array('*'));
+		}
+		else
+		{
+		    $data['meals']=$this->common_model->get('meal',array('*'),null,$search_text,'title');	
+		}
+		$this->load->view('get_meal_list',$data);
+	}
+	public function edit_meal_right()
+	{
+		$meal_title=$this->input->post('meal_title_right');
+		$meal_desc=$this->input->post('meal_desc_right');
+		$meal_id=$this->input->post('meal_id_right');
+		$meal_attachment=$this->input->post('uploaded_image_name_right');
+		$meal_arr=explode(",",$meal_attachment);
+		$data_meal_updt=array(
+				'title' => $meal_title,
+				'description' => $meal_desc,
+					      );
+		$where_meal=array(
+				'id' =>  $meal_id
+					  );
+		$update_res=$this->common_model->update('meal',$data_meal_updt,$where_meal);
+		if($update_res)
+		{
+				if(count($meal_arr) > 1)
+				{
+					for($i=1;$i<sizeof($meal_arr);$i++)
+				       {
+					   $data_meal_attachment=array(
+						'meal_id' => $meal_id,
+						'filename' => $meal_arr[$i]
+								       );
+					   
+					  $add_attach_res=$this->common_model->add('meal_images',$data_meal_attachment);
+				       }
+				}
+		}
+		redirect('tools');
+		
+	}
+	public function get_edit_right_section()
+	{
+		$meal_id=$this->input->post('meal_id');
+		$where_meal=array(
+			'id' => $meal_id
+				  );
+		$data['meal_one_record']=$this->common_model->get('meal',array('*'),$where_meal);
+		$this->load->view('meal_right_section',$data);
+	}
+	
+	public function remove_image()
+	{
+		$image_id=$this->input->post('image_id');
+                $image_name=$this->input->post('image_name');
+		$where=array(
+			'id' => $image_id
+			     );
+		$del_res=$this->common_model->delete('meal_images',$where);
+		if($del_res)
+		{
+			$file=getcwd().'/meal_images/'.$image_name;
+	                unlink($file);
+			echo "deleted";
+		}
+		else{
+			echo "not_deleted";
+		}
+	}
+	public function remove_uploaded_image() /////Delete Only uploaded but not saved images from edit pop -up
+	{
+		$image_name=$this->input->post('image_name');
+		$file=getcwd().'/meal_images/'.$image_name;
+		if(unlink($file))
+		{
+		 echo "deleted";
+		}
+		else
+		{
+		 echo "not_deleted";
+		}
+	}
+	
+	
+	public function get_exercise_list()
+	{
+	        $type_id=$this->input->post('type_id');
+		$mode = $this->input->post('mode');
+		 $search_text = $this->input->post('search_text');
+		if($search_text == '')
+		{
+			$where_meal=array(
+			'type_id' => $type_id
+			     );
+			$data['exer_info']=$this->common_model->get('exercise_list',array('*'),$where_meal);
+		}
+		else{
+			$where_meal=array(
+			'type_id' => $type_id
+			     );
+			$data['exer_info']=$this->common_model->get('exercise_list',array('*'),$where_meal,$search_text,'title');
+		}
+		
+		$data['mode'] = $mode;
+	        $data['type_id'] = $type_id;
+		
+		$this->load->view('get_exercise_client',$data);
+	}
+	
+	public function customize_exercise_pop()
+	{
+	        $exer_id=$this->input->post('exer_id');
+		
+		$where_meal=array(
+			'id' => $exer_id
+			     );
+		$data['exer_info']=$this->common_model->get('exercise_list',array('*'),$where_meal);
+		echo $client_id = $this->input->post('client_id');
+		$data['client_id'] = $client_id;
+		$data['user_prgrm_id'] = $this->input->post('user_prgrm_id');
+		$data['exer_id'] = $exer_id;
+		$where_cleint=array(
+			'id' => $client_id
+			     );
+		$data['user_info']=$this->common_model->get('user',array('*'),$where_cleint);
+		
+		$this->load->view('customize_exercise_frm',$data);
+	}
+	public function add_more_sets()
+	{
+	        $tot_cnt=$this->input->post('tot_cnt');
+		
+		$data['tot_val'] = $tot_cnt;
+		$this->load->view('add_more_sets',$data);
+	}
+	public function get_program_list()
+	{
+	     
+		$mode = $this->input->post('mode');
+		 $search_text = $this->input->post('search_text');
+		if($search_text == '')
+		{
+			
+			$data['exer_info']=$this->common_model->get('program_list',array('*'));
+		}
+		else{
+		
+			$data['exer_info']=$this->common_model->get('program_list',array('*'),null,$search_text,'name');
+		}
+		
+		$data['mode'] = $mode;
+	       
+		
+		$this->load->view('get_program',$data);
+	}
+	public function get_programd_drop()
+	{
+	     
+		$date_work = $this->input->post('date_work');
+		$client_id = $this->input->post('client_id');
+		$exer_id = $this->input->post('exer_id');
+		$where_cleint=array(
+			'client_id' => $client_id,
+			'workout_date' => date("Y-m-d",strtotime($date_work))
+			     );
+		$data['program_info']=$this->common_model->get('user_program_exercises',array('*'),$where_cleint);
+		$data['exer_id'] = $exer_id;
+		$data['client_id'] = $client_id;
+		$this->load->view('get_assigned_program',$data);
+	}
+	public function delete_ex_val()
+	{
+	     
+		
+		$exer_id = $this->input->post('exer_id');
+		
+		$where_cleint_get=array(
+			'id' => $exer_id
+			     );
+		$get_val = $this->common_model->get('user_program_ex_exercise',array('*'),$where_cleint_get);
+		$user_prgram = $get_val[0]['user_program_id'];
+		$exercise_id = $get_val[0]['exercise_id'];
+		$where_cleint=array(
+			'id' => $exer_id
+			     );
+		$del_val = $this->common_model->delete('user_program_ex_exercise',$where_cleint);
+		if($del_val)
+		{
+			$where_cleint=array(
+				'user_program_id' => $user_prgram,
+				'exercise_id' => $exercise_id
+				     );
+			//print_r($where_cleint);
+			$del_val = $this->common_model->delete('user_custom_exercise',$where_cleint);
+			if($del_val)
+			{
+				echo "yes";
+			}
+		}
+		
+	}
+	
+	
+	public function add_exer_to_program()
+	{
+	     
+		$program_id = $this->input->post('program_id');
+		$user_prog_id = $this->input->post('user_prog_id');
+		$client_id = $this->input->post('client_id');
+		$exer_id = $this->input->post('exer_id_pop');
+		$data_meal_updt=array(
+			'user_program_id' => $user_prog_id,
+			'client_id' => $client_id,
+			'program_id' => $program_id,
+			'exercise_id' => $exer_id
+				      );
+		
+		$update_res=$this->common_model->add('user_program_ex_exercise',$data_meal_updt);
+		$where_cleint=array(
+			'id' => $update_res
+			     );
+		$data['exer_info']=$this->common_model->get('user_program_ex_exercise',array('*'),$where_cleint);
+		
+		$this->load->view('get_last_added_exer',$data);
+	}
+	
+	
+	public function add_program_list()
+	{
+	     
+		$program_id = $this->input->post('program_id');
+		$trainer_id = $this->input->post('trainer_id');
+		$client_id = $this->input->post('client_id');
+		$date_val = $this->input->post('date_val_training');
+		$data_meal_updt=array(
+			'program_id' => $program_id,
+			'client_id' => $client_id,
+			'trainer_id' => $trainer_id,
+			'workout_date' => date("Y-m-d",strtotime($date_val))
+				      );
+		
+		$update_res=$this->common_model->add('user_program_exercises',$data_meal_updt);
+		if($update_res)
+		{
+			$where_meal=array(
+			'program_id' => $program_id
+			     );
+			$exercises = $this->common_model->get('default_program_exercises',array('*'),$where_meal);
+			foreach($exercises as $exer)
+			{
+				$data_meal_updt=array(
+				'user_program_id' => $update_res,
+				'client_id' => $client_id,
+				'program_id' => $program_id,
+				'exercise_id' => $exer['exercise_id']
+					      );
+			
+				$insert_exer=$this->common_model->add('user_program_ex_exercise',$data_meal_updt);
+			}
+			
+			
+			$where_meal=array(
+			'id' => $update_res
+			     );
+			$data['last_info']=$this->common_model->get('user_program_exercises',array('*'),$where_meal);
+		}
+		$data['client_id'] = $client_id;
+		
+		$this->load->view('add_program_list',$data);
+	}
+	
+	public function insert_program()
+	{
+		if($this->input->server('REQUEST_METHOD') == 'POST')
+	        {
+			$title=$this->input->post('program_title');
+			$user_id = $this->session->userdata('site_user_id');
+			 $exercises = $this->input->post('all_program');
+			
+			$data_meal_updt=array(
+				'name' => $title,
+				'created_by' => $user_id,
+				'created_date' => date("Y-m-d H:i:s")
+					      );
+			
+			$update_res=$this->common_model->add('program_list',$data_meal_updt);
+			if($update_res)
+			{
+				$exercises = $this->input->post('all_program');
+				$exp_val = explode(",",$exercises);
+				foreach($exp_val as $val)
+				{
+					$xp_val = explode("##",$val);
+					$data_meal_insrt=array(
+						'program_id' => $update_res,
+						'exercise_id' => $xp_val[0],
+						'type_id' => $xp_val[1]
+							      );
+					
+					$update_res_val=$this->common_model->add('default_program_exercises',$data_meal_insrt);
+				}
+				redirect('tools');
+			}
+			
+		}
+	}
+	
+	public function get_program_info()
+	{
+	        $program_id=$this->input->post('program_id');
+		
+		$where_meal=array(
+			'id' => $program_id
+			     );
+		$data['prog_info']=$this->common_model->get('program_list',array('*'),$where_meal);
+		$where_meal=array(
+		'program_id' => $program_id
+		     );
+		$data['exer_info']=$this->common_model->get('default_program_exercises',array('*'),$where_meal);
+		
+		$data['program_id'] = $program_id;
+		
+		$this->load->view('edit_program',$data);
+	}
+	
+	public function get_exer_info()
+	{
+	        $exer_id=$this->input->post('exer_id');
+		
+		$where_meal=array(
+			'id' => $exer_id
+			     );
+		$data['exer_info']=$this->common_model->get('exercise_list',array('*'),$where_meal);
+		
+		$this->load->view('view_exercise',$data);
+	}
+	
+	public function get_program()
+	{
+	        $date_val=$this->input->post('date_val');
+		$month=$this->input->post('month');
+		$year=$this->input->post('year');
+		$trainer_id=$this->input->post('trainer_id');
+		$client_id=$this->input->post('client_id');
+		$new_date = $date_val."-".$month."-".$year;
+		$where_meal=array(
+			'client_id' => $client_id,
+			'trainer_id' => $trainer_id,
+			'workout_date' => date("Y-m-d",strtotime($new_date))
+			     );
+		$data['program_info']=$this->common_model->get('user_program_exercises',array('*'),$where_meal);
+		$data['client_id'] = $client_id;
+		$data['day_val'] = $date_val;
+		$data['month_val'] = $month;
+		$data['year_val'] = $year;
+		$this->load->view('get_program_details',$data);
+	}
+	
+	
+	public function delete_program()
+	{
+	        $program_id=$this->input->post('progran_edit_id');
+		
+		$where_meal=array(
+			'id' => $program_id
+			     );
+		$this->common_model->delete('program_list',$where_meal);
+		$where_meal=array(
+		'program_id' => $program_id
+		     );
+		$this->common_model->delete('default_program_exercises',$where_meal);
+		
+		redirect('tools');
+	}
+	
+	public function remove_programs()
+	{
+		$client_id =$this->input->post('client_id');
+	        $program_id=$this->input->post('program_id');
+		
+		$where_meal=array(
+			'id' => $program_id
+			     );
+		$this->common_model->delete('user_program_exercises',$where_meal);
+		$where_meal=array(
+		'user_program_id' => $program_id
+		     );
+		$this->common_model->delete('user_custom_exercise',$where_meal);
+		$where_meal=array(
+		'user_program_id' => $program_id
+		     );
+		$this->common_model->delete('user_program_ex_exercise',$where_meal);
+		
+		redirect('client-profile/'.$client_id);
+	}
+	
+	public function update_program()
+	{
+		if($this->input->server('REQUEST_METHOD') == 'POST')
+	        {
+			$progran_edit_id = $this->input->post('progran_edit_id');
+			$title=$this->input->post('program_title');
+			$user_id = $this->session->userdata('site_user_id');
+			 $exercises = $this->input->post('all_program');
+			
+			$data_meal_updt=array(
+				'name' => $title
+					      );
+			$where_meal=array(
+			'id' => $progran_edit_id
+			     );
+			$update_res=$this->common_model->update('program_list',$data_meal_updt,$where_meal);
+			if($update_res)
+			{
+				$exercises = $this->input->post('all_program');
+				$exp_val = explode(",",$exercises);
+				$where_meal_edit=array(
+					'program_id' => $progran_edit_id
+					     );
+				$get_exist = $this->common_model->get('default_program_exercises',array('*'),$where_meal_edit);
+				
+				$arr_exist = array();
+				foreach($get_exist as $val)
+				{
+					$arr_exist[] = $val['exercise_id']."##".$val['type_id'];
+				}
+				
+				$removed_val = array_diff($arr_exist, $exp_val);
+				
+				$added_val = array_diff($exp_val, $arr_exist);
+				
+				foreach($removed_val as $removed)
+				{
+					$xp_val = explode("##",$removed);
+					$data_meal_del=array(
+						'program_id' => $progran_edit_id,
+						'exercise_id' => $xp_val[0],
+						'type_id' => $xp_val[1]
+							      );
+					
+					$del_val=$this->common_model->delete('default_program_exercises',$data_meal_del);
+				}
+				
+				foreach($added_val as $add)
+				{
+					$xp_val = explode("##",$add);
+					$data_meal_add=array(
+						'program_id' => $progran_edit_id,
+						'exercise_id' => $xp_val[0],
+						'type_id' => $xp_val[1]
+							      );
+					
+					$add_val=$this->common_model->add('default_program_exercises',$data_meal_add);
+				}
+				
+				redirect('tools');
+			}
+			
+		}
+	}
+	
+	
+	public function customize_exer_client()
+	{
+		if($this->input->server('REQUEST_METHOD') == 'POST')
+	        {
+			$client_id = $this->input->post('client_id');
+			$user_program_id=$this->input->post('user_program_id');
+			$user_id = $this->session->userdata('site_user_id');
+			 $exer_id = $this->input->post('exer_id');
+			 $program_id = $this->input->post('program_id');
+			$sets_rep = $this->input->post('set_reps');
+			
+			$sets_kg = $this->input->post('set_kgs');
+			for($val = 0;$val<count($sets_rep);$val++)
+			{
+				$reps = $sets_rep[$val];
+				$kgs = $sets_kg[$val];
+				if($val == 0)
+				{
+					$tot_set = $reps."#@#@".$kgs;
+					
+				}
+				else
+				{
+					$tot_set .= $reps."#@#@".$kgs;
+					
+				}
+				if($val < (count($sets_rep) -1))
+				{
+					$tot_set .= ",";
+				}
+				
+			}
+			
+			$where_cleint=array(
+				'client_id' => $client_id,
+				'user_program_id' => $user_program_id,
+				'exercise_id' => $exer_id,
+				     );
+			$custom_info=$this->common_model->get('user_custom_exercise',array('*'),$where_cleint);
+			
+			if(count($custom_info) > 0)
+			{
+				$data_meal_updt=array(
+				'set_value' => $tot_set,
+				'instruction' => $this->input->post('instruction_edit')
+					      );
+				$where_meal=array(
+				'id' => $custom_info[0]['id']
+				     );
+				$update_res=$this->common_model->update('user_custom_exercise',$data_meal_updt,$where_meal);
+			}
+			else{
+				$data_meal_add=array(
+					'client_id' => $client_id,
+					'trainer_id' => $user_id,
+					'user_program_id' => $user_program_id,
+					'program_id' => $program_id,
+					'exercise_id' => $exer_id,
+					'set_value' => $tot_set,
+					'instruction' => $this->input->post('instruction_edit')
+						      );
+				
+				$add_val=$this->common_model->add('user_custom_exercise',$data_meal_add);
+			}
+			redirect('client-profile/'.$client_id);
+		}
+	}
+	
+	
+}
+?>

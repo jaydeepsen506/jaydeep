@@ -1,0 +1,609 @@
+@media (min-width: 1400px) {
+	
+}
+@media (min-width: 1350px) {
+	.mainarea {
+	width: 1300px;
+	margin: 0 auto;
+}
+.headerouter {
+	width: 1300px;
+	margin: 0 auto;
+}
+.side-nav {
+	left: 50%;
+	margin-left: -650px;
+}
+.lowerlinkswh li {
+ padding: 4px 10px;
+}
+}
+@media (max-width: 1350px) {
+ .lowerlinkswh li {
+ padding: 4px 10px;
+}
+ .bookarea {
+ left: 15px;
+ right: 15px;
+}
+ .lowerlinks li {
+ padding: 5px 10px;
+}
+}
+@media (max-width: 1299px) {
+ .lowerlinkswh li {
+ padding: 4px 10px;
+}
+ .bookarea {
+ left: 5px;
+ right: 5px;
+}
+ .lowerlinks li {
+ padding: 5px 10px;
+}
+.innerblog {
+	padding: 10px;
+}
+.topwite {
+	margin-left: -70px;
+}
+.fildprogress {
+	width: 130px;
+}
+.calendar {
+	font-size: 13px;
+	padding: 0;
+}
+.listcell span {
+	font-size: 14px;
+}
+.notohead {
+	letter-spacing: 1px;
+	font-size: 13px;
+}
+.account {
+	padding: 15px;
+}
+}
+@media (max-width: 1199px) {
+.innerblogtool:after {
+ position: absolute;
+ content: "";
+ background-image: url(../images/dietarrowtop.png);
+ background-position: 0 0;
+ width: 24px;
+ height: 12px;
+ left: 50%;
+ top: -12px;
+ margin-left: -12px;
+}
+ .messageleftwidth {
+ float: left;
+ width: 40%;
+}
+.messagerightwidth {
+ float: left;
+ width: 60%;
+}
+.proimg_inbox {
+ margin-right: 10px;
+}
+.messagesingle {
+ padding: 10px;
+}
+.messagesingle.new:after {
+ left: 56px;
+}
+.appoin_txt {
+	letter-spacing: 1px;
+	font-size: 12px;
+}
+.innerblogright {
+	padding: 10px;
+}
+.notohead {
+	letter-spacing: 1px;
+}
+.bookarea {
+	padding: 5px;
+}
+ .datehead {
+ font-size: 16px;
+}
+.bookhead {
+	font-size: 14px;
+}
+.afterhead {
+	font-size: 12px;
+}
+.avilable {
+	font-size: 13px;
+}
+.bookable {
+	font-size: 12px;
+}
+.lowerlinks li a {
+	font-size: 12px;
+}
+.lowerlinkswh li a {
+	font-size: 12px;
+}
+.calendar .years .prev span {
+	padding-left: 12px;
+}
+
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+ .customwidth .col-md-8 {
+ width: 100%;
+}
+.customwidth_inedx .col-md-8 {
+ width: 60%;
+}
+ .customwidth .col-md-4 {
+ width: 100%;
+}
+.customwidth_inedx .col-md-4 {
+ width: 40%;
+}
+ .customwidth .col-md-7 {
+ width: 100%;
+}
+ .customwidth .col-md-5 {
+ width: 100%;
+}
+.innerblogright {
+	 float: left;
+	 width: 100%;
+}
+ .innerblogright:first-child {
+ margin-right: 0;
+}
+ .innerblogright:last-child {
+ margin-left: 0;
+}
+.profile-name {
+	float: none;
+	margin: 0 auto;
+}
+.profile-txt {
+    overflow: vissible;
+    text-align: center;
+}
+}
+@media (min-width: 768px) {
+ .rowinbox .col-sm-4 {
+ padding: 0;
+}
+ .rowinbox .col-sm-8 {
+ padding: 0;
+}
+
+}
+@media (max-width: 991px) {
+	.navbar-header .navbar-toggle{
+    display: block;
+}
+ #wrapper {
+ padding-left: 0;
+}
+ .navbar-toggle {
+ position: absolute;
+ right: 0px;
+ top: 50px;
+ margin-right: 5px;
+}
+ .navbar-header {
+ float: left;
+}
+ .top-nav {
+ float: left;
+ padding: 0;
+ width: 100%;
+}
+ .navbar-collapse {
+ position: absolute;
+ width: 100%;
+ top: 100px;
+}
+.side-nav {
+    bottom: auto;
+    left: 0;
+    margin: 0;
+    position: static;
+    top: 100px;
+    width: 100%;
+	right: 0;
+}
+ .navbar-collapse {
+ position: absolute;
+ width: 100%;
+ top: 100px;
+ padding: 0;
+ border: 0;
+}
+.innerblog {
+ min-height: inherit;
+}
+.descriptiotxt {
+ margin-bottom: 30px;
+}
+.messageleftwidth {
+ float: left;
+ width: 57%;
+ position: fixed;
+ left: -60%;
+ top: 130px;
+ overflow-y: auto;
+ bottom: 0;
+ z-index: 1;
+}
+.messagerightwidth {
+ float: left;
+ width: 100%;
+ position: relative;
+ left: 0;
+}
+.rowinbox {
+ overflow: hidden;
+ margin-top: 20px;
+}
+.strapmenu {
+ display: block;
+}
+.messageleftwidth.highlight {
+ left: 0;
+}
+.messagerightwidth.highlight2 {
+ left: 60%;
+}
+.inboxmessageboy {
+ padding: 10px;
+}
+.bigtextarea {
+	height: 300px;
+}
+.profile-name {
+	float: left;
+	margin-right: 20px;
+} 
+.profile-txt {
+    text-align: left;
+}
+}
+@media (max-width: 767px) {
+ .side-nav {
+ top: 100px;
+ width: 100%;
+ margin: 0;
+}
+ .innerblog {
+ padding: 10px 15px;
+ margin-bottom: 10px;
+}
+ .datehead {
+ font-size: 20px;
+ margin-bottom: 6px;
+}
+ .appoin_txt {
+ margin-bottom: 2px;
+ line-height: 18px;
+}
+ .bookarea {
+ left: 10px;
+ right: 30px;
+}
+ .lowerlinks li {
+ padding: 0px 15px;
+}
+ .gapright {
+ padding-right: 0;
+}
+ .gapleft {
+ padding-left: 0;
+}
+ .bookckedspcial {
+ right: -20px;
+ width: 20px;
+}
+ .innerblogright {
+ padding: 5px;
+}
+ .notohead {
+ letter-spacing: normal;
+}
+ .bookhead {
+ font-size: 16px;
+ line-height: 20px;
+}
+ .afterhead {
+ font-size: 12px;
+ line-height: 16px;
+}
+ .avilable {
+ font-size: 15px;
+ line-height: 18px;
+}
+ .bookable {
+ font-size: 12px;
+ line-height: 16px;
+ margin-bottom: 5px;
+}
+ .lowerlinks li a {
+ font-size: 14px;
+}
+ .listcell span {
+ font-size: 14px;
+}
+ .lowerlinkswh li a {
+ font-size: 14px;
+}
+ .listcell {
+ height: 28px;
+}
+ .bookckedspcial span {
+ top: -6px;
+ font-size: 10px;
+}
+ .buttongeneral_tool {
+ text-align: center;
+}
+ .innerblogtool {
+ padding: 10px;
+}
+ .panel-title span {
+ font-size: 13px;
+ width:125px;
+}
+ .panel-title a {
+ font-size: 13px;
+}
+ #page-wrapper {
+ padding: 10px;
+}
+ .panel-heading {
+ padding: 8px;
+}
+ .panel-title i {
+ color: #b9cad6;
+ font-size: 13px;
+ padding-left: 0px;
+}
+ .workouttxt {
+ font-size: 13px;
+}
+ .workimg {
+ width: 40px;
+}
+ .workimg img {
+ max-width: 100%;
+}
+ .workouttxt {
+ line-height: 40px;
+ padding-left: 6px;
+}
+ .editright {
+ padding: 10px 0;
+}
+ .editright a {
+ margin-right: 10px;
+}
+ .wonbut {
+ padding: 10px 6px 10px 0;
+}
+ .appoin_txt {
+ font-size: 14px;
+ letter-spacing: 1px;
+}
+ .butsblue {
+ width: 140px !important;
+ height: 30px !important;
+ line-height: 30px !important;
+ padding: 0 0 0 40px !important;
+ background-position: 20px center !important;
+ font-size: 13px !important;
+}
+ .butsetting {
+ width: 140px !important;
+ height: 30px !important;
+ line-height: 30px !important;
+ padding: 0 0 0 40px !important;
+ background-position: 20px center !important;
+ font-size: 13px !important;
+}
+ .greenblue {
+ width: 140px !important;
+ height: 30px !important;
+ line-height: 30px !important;
+ font-size: 13px !important;
+}
+ .rightbutplace input[type="file"] {
+ width: 140px;
+ height: 30px;
+}
+ .messagebody {
+ font-size: 12px;
+ line-height: 14px;
+}
+ .massboxin {
+ font-size: 12px;
+ line-height: 15px;
+ padding-right: 40px;
+}
+.massboxinright {
+ font-size: 12PX;
+ line-height: 15PX;
+ padding-left: 40PX;
+}
+.messagername {
+ padding: 10px;
+}
+.inboxpanel em {
+ padding: 10px;
+}
+.inboxpanel a {
+ padding: 10px;
+}
+.sendmessage {
+ background-position: 5px center;
+ width: 110px !important;
+ line-height: 30px;
+ height: 30px;
+ font-size: 12px !important;
+ line-height: 31px !important;
+ padding-left: 25px!important
+}
+.messageleftwidth {
+ float: left;
+ width: 86%;
+ position: fixed;
+ left: -88%;
+ top: 130px;
+ overflow-y: auto;
+ bottom: 0;
+ z-index: 1;
+}
+.messageleftwidth.highlight {
+ left: 0;
+}
+.messagerightwidth.highlight2 {
+ left: 88%;
+}
+.bigtextarea {
+	height: 250px;
+}
+.topwite {
+	margin-left: 0px;
+	left: auto;
+	right: 15px;
+}
+.fildprogress {
+	width: 120px;
+	padding: 5px 5px 5px 20px;
+	margin-bottom: 5px;
+}
+.questionmark {
+	top: 16px;
+}
+.panel-title em {
+	font-size: 14px;
+}
+
+.del .col-sm-6.text-right {
+	text-align: left;
+	margin: 20px 0;
+}
+.appoin_txt .paswrd {
+	margin: 10px 0;
+}
+.navbar-header .navbar-toggle{
+    display: block;
+}
+
+}
+
+@media (max-width: 767px) {
+	.modal.refresh-pop .modal-dialog {
+		margin-left: -125px;
+		left: 50%;
+	}
+	.col-sm-6.time-part {
+		width: 50%;
+		float: left;
+		text-align: center;
+	}
+}
+
+
+
+
+
+
+
+
+@media (max-width: 639px) {
+ .navbar-inverse .navbar-brand {
+ width: 170px;
+}
+ .top-nav li a {
+ padding: 15px 15px;
+}
+ .workouttxt {
+ text-overflow: ellipsis;
+ width: 110px;
+ overflow: hidden;
+ white-space: nowrap;
+}
+.proimgtop {
+	width: 30px;
+	height: 30px;
+}
+.proimgtop img {
+	max-width: 100%;
+}
+.Protxt {
+	line-height: 30px;
+}
+}
+@media (max-width: 480px) {
+}
+@media (max-width: 479px) {
+.navbar-inverse .navbar-brand {
+	padding: 10px 0 10px 15px;
+	width: 120px;
+}
+.navbar-inverse .navbar-brand img {
+	max-width: 100%;
+}
+ .top-nav li a {
+ padding: 15px 15px;
+}
+ .nav-tabs li {
+ width: 60px;
+}
+ .nav-tabs li a {
+ font-size: 10px;
+}
+.tabhead {
+	width: 122px;
+}
+.intobox {
+	padding-right: 5px;
+	font-size: 13px;
+}
+.Protxt {
+	font-size: 14px;
+}
+.col-sm-6.time-part {
+	width: 100%;
+	float: none;
+	margin-bottom: 20px;
+}
+.hour h3 {
+	font-size: 14px;
+}
+.profile-name {
+	width: 100px;
+	height: 100px;
+}
+.profile-txt h2 {
+    font-size: 20px;
+}
+.profile-txt a {
+	font-size: 12px;
+}
+.address h2 {
+	font-size: 16px;
+	margin-bottom: 5px;
+}
+.address p {
+    color: #000;
+    font-size: 12px;
+}
+.address {
+	margin-top: 20px;
+}
+.log {
+	font-size: 17px;
+}
+}

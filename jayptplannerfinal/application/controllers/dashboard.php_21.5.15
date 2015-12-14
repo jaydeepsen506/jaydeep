@@ -1,0 +1,761 @@
+<?php
+class Dashboard extends CI_Controller {
+
+	public function __construct()
+	{
+		parent::__construct();
+		
+		if(!$this->session->userdata('is_site_logged_in')){
+			redirect('home');
+		}
+		// load models
+		$this->load->model('sitesetting_model');
+		$this->load->model('contactsetting_model');
+		$this->load->model('common_model');
+		$this->load->model('network_model');
+		$this->load->model('trainer_model');
+	}
+	function index()
+	{
+		if ($this->input->server('REQUEST_METHOD') === 'POST')
+		{
+			
+		}
+		$header['settings'] =$this->sitesetting_model->get_settings();
+		// load HTML header file
+		$this->load->view('HTML_header');
+		// load header file
+		$this->load->view('header',$header);
+		// load template
+		$this->load->view('dashboard');
+		// load HTML footer file
+		$this->load->view('footer');
+		
+		// load HTML footer file
+		$this->load->view('HTML_footer');
+	}
+	function add_client()
+	{
+		if ($this->input->server('REQUEST_METHOD') === 'POST')
+		{
+			$data_to_store = array(
+			'email' => trim($this->input->post('email'))
+		    );
+		   $user_id = $this->session->userdata('site_user_id');
+		    // getting user info
+		    $user_info = $this->common_model->get('user',array('*'),$data_to_store);
+		     $password=random_string('alnum',10);
+		    if(count($user_info) == 0)
+		    {
+			$data_to_store = array(
+				'name' => trim($this->input->post('name_val')),
+				'type' => 'C',
+				'created_by' => $user_id,
+				'email' => trim($this->input->post('email')),
+				'password' => md5($password),
+				'created_date' => date("Y-m-d"),
+				'status' => 'Y'
+				
+			    );
+	
+			    // getting user info
+			    $user_insrt = $this->common_model->add('user',$data_to_store);
+			    if($user_insrt)
+			    {
+				$data_to_store = array(
+					'id' => 1
+				    );
+				$site_details = $this->sitesetting_model->get_settings();
+				//$get_email_template = $this->common_model->get('email_template',array('*'),$data_to_store);
+				//$system_mail = $site_details[0]['system_email'];
+				//$mail =$this->input->post('email');
+				//$email_content= $this->common_model->get('email_template',array('*'),$data_to_store);
+				//$email_body = $email_content[0]['email_body'];
+				//$search_val= array("[EMAIL]","[PASSWORD]");
+				//$replace_val   = array($this->input->post('email'),$password);
+				//$newbody = str_replace($search_val, $replace_val, $email_body);
+				//$message=$newbody;
+				//
+				//$this->load->library('email');
+				//     
+				//  $config['protocol'] = 'sendmail';
+				//  $config['charset'] = 'utf-8';
+				//  $config['wordwrap'] = TRUE;
+				//  $config['mailtype'] = 'html';
+				//  
+				//  $this->email->initialize($config);
+				//     
+				//  $this->email->from($system_mail,$site_details[0]['site_name']);
+				//  $this->email->to($mail);
+				//  
+				//  $this->email->subject($email_content[0]['subject']);
+				//  $this->email->message($message);	
+				//  
+				//  $this->email->send();
+				
+				//$this->session->set_flashdata("flash_message",'client_created');
+				redirect('client-profile/'.$user_insrt);
+			    }
+			  
+		    }
+		    else{
+			$this->session->set_flashdata("flash_message",'email_exits');
+		    }
+		      redirect("dashboard");
+		}
+		
+	}
+	
+	public function my_account_page()
+	{
+		if($this->input->server('REQUEST_METHOD') == 'POST')
+	          {
+			$name=$this->input->post('fullname');
+			$phn_num=$this->input->post('phn_num');
+			$working_add=$this->input->post('working_add');
+			$billing_add=$this->input->post('billing_add');
+			$about=$this->input->post('about');
+			if($_FILES['user_image']['name']!= '')
+			    {
+				$DIR_IMG_NORMAL = "user_images/";
+			
+	                        $uploaded_file=$_FILES['user_image']['name'];
+		                $ext=explode(".",$uploaded_file);
+		                $extension=end($ext);
+				$filename = 'profile'.substr($_FILES['user_image']['name'],strripos($_FILES['user_image']['name'],'.'));
+				$s=time()."_".$filename;
+		 
+				$fileNormal = $DIR_IMG_NORMAL.$s;
+			      
+		 
+				$file = $_FILES['user_image']['tmp_name'];
+				list($width, $height) = getimagesize($file);
+		 
+			       
+				$result = move_uploaded_file($file, $fileNormal);
+			       if($result)
+			       {
+				$this->create_thumb($s);
+					$data_to_dpdt=array(
+					   'name'=>$name,
+					   'phone' =>$phn_num,
+					   'work_address' =>$working_add,
+					   'billing_address' =>$billing_add,
+					   'about' =>$about,
+					   'image' => $s
+						       );
+			       }
+			    }
+			    else
+			    {
+					$data_to_dpdt=array(
+					   'name'=>$name,
+					   'phone' =>$phn_num,
+					   'work_address' =>$working_add,
+					   'billing_address' =>$billing_add,
+					   'about' =>$about
+						        );
+			    }
+			$where_profile=array(
+				'id' => $this->session->userdata('site_user_id')
+					     );
+			$update_res=$this->common_model->update('user',$data_to_dpdt,$where_profile);
+			if($update_res)
+			{
+			  $this->session->set_flashdata('flash_message', 'acc_updated');
+			}
+			redirect('my-account');
+		  }
+		$header['settings'] =$this->sitesetting_model->get_settings();
+		// load HTML header file
+		$this->load->view('HTML_header');
+		// load header file
+		$this->load->view('header',$header);
+		$where=array(
+			'id' => $this->session->userdata('site_user_id')
+			     );
+		$data['user_details']= $this->common_model->get('user',array('*'),$where);
+		// load template
+		$this->load->view('my_account',$data);
+		// load HTML footer file
+		$this->load->view('footer');
+		
+		// load HTML footer file
+		$this->load->view('HTML_footer');
+	}
+	function create_thumb($imagename)
+        {
+            $config['image_library'] = 'gd2';
+            $config['source_image']	= 'user_images/'.$imagename;
+            $config['new_image'] = 'user_images/';
+            //$config['create_thumb'] = TRUE;
+            $config['maintain_ratio'] = TRUE;
+            $config['width']	 = 190;
+            $config['height']	= 225;
+            
+            //$this->image_lib->initialize($config);
+            $this->load->library('image_lib', $config); 
+            $result=$this->image_lib->resize();
+            $this->image_lib->clear();
+            
+         }
+	 public function change_password()
+	 {
+             $new_pass=$this->input->post('new_pass');
+	      $data_to_dpdt=array(
+                        'password' => md5($new_pass)
+				);
+	      $where=array(
+		'id' => $this->session->userdata('site_user_id')
+			   );
+	      $update_res=$this->common_model->update('user',$data_to_dpdt,$where);
+	      if($update_res)
+	      {
+		$this->session->set_flashdata('flash_message', 'password_changed');
+	      }
+	      redirect('my-account');
+	 }
+	 
+	 public function client_profile()
+	 {
+		 $client_id=$this->uri->segment(2);
+		if($this->input->server('REQUEST_METHOD') == 'POST')
+	          {
+			 $name=$this->input->post('fullname');
+			 $email=$this->input->post('email');
+			 $phn_num=$this->input->post('phn_num');
+			 $working_add=$this->input->post('working_add');
+			 $about=$this->input->post('about');
+			 $email_check=$this->trainer_model->check_email_exists_or_not($email,$client_id);
+			 if($_FILES['user_image']['name']!= '')
+			    {
+				$DIR_IMG_NORMAL = "user_images/";
+			
+	                        $uploaded_file=$_FILES['user_image']['name'];
+		                $ext=explode(".",$uploaded_file);
+		                $extension=end($ext);
+				$filename = 'profile'.substr($_FILES['user_image']['name'],strripos($_FILES['user_image']['name'],'.'));
+				$s=time()."_".$filename;
+		 
+				$fileNormal = $DIR_IMG_NORMAL.$s;
+			      
+		 
+				$file = $_FILES['user_image']['tmp_name'];
+				list($width, $height) = getimagesize($file);
+		 
+			       
+				$result = move_uploaded_file($file, $fileNormal);
+			       if($result)
+			       {
+				$this->create_thumb($s);
+				
+				  if(count($email_check)==0)
+				  {
+					$data_to_dpdt=array(
+					   'name'=>$name,
+					   'email'=>$email,
+					   'phone' =>$phn_num,
+					   'work_address' =>$working_add,
+					   'about' =>$about,
+					   'image' => $s
+						       );
+				  }
+				  else
+				  {
+				       	$data_to_dpdt=array(
+					   'name'=>$name,
+					   'phone' =>$phn_num,
+					   'work_address' =>$working_add,
+					   'about' =>$about,
+					   'image' => $s
+						       );
+				  }
+			       }
+			    }
+			    else
+			    {
+				 if(count($email_check)==0)
+				  {
+					$data_to_dpdt=array(
+					   'name'=>$name,
+					   'email'=>$email,
+					   'phone' =>$phn_num,
+					   'work_address' =>$working_add,
+					   'about' =>$about
+						        );
+				  }
+				  else{
+					$data_to_dpdt=array(
+					   'name'=>$name,
+					   'phone' =>$phn_num,
+					   'work_address' =>$working_add,
+					   'about' =>$about
+						        );
+				  }
+			    }
+			    $where_profile=array(
+				'id' => $client_id
+					     );
+			    $update_res=$this->common_model->update('user',$data_to_dpdt,$where_profile);
+			if($update_res)
+			{
+			  $this->session->set_flashdata('flash_message', 'client_acc_updated');
+			}
+			redirect('client-profile/'.$client_id);
+		  }
+		$header['settings'] =$this->sitesetting_model->get_settings();
+		// load HTML header file
+		$this->load->view('HTML_header');
+		// load header file
+		$this->load->view('header',$header);
+		$where=array(
+			'id' => $client_id
+			     );
+		$data['user_details']= $this->common_model->get('user',array('*'),$where);
+		// load template
+		$this->load->view('client_profile',$data);
+		// load HTML footer file
+		$this->load->view('footer');
+		
+		// load HTML footer file
+		$this->load->view('HTML_footer');
+	 }
+	 public function delete_client_account()
+	 {
+		$client_id=$this->uri->segment(2);
+		$data_to_dpdt=array(
+			'deleted_status' => 'Y'
+				    );
+		  $where_profile=array(
+				'id' => $client_id
+					     );
+		  $update_res=$this->common_model->update('user',$data_to_dpdt,$where_profile);
+		  if($update_res)
+		  {
+		     $this->session->set_flashdata('flash_message', 'client_deleted');
+		  }
+		  redirect('client-profile/'.$client_id);
+	 }
+	 public function client_password_change()
+	 {
+		$client_id=$this->uri->segment(2);
+		$password=random_string('alnum',10);
+                $data_to_dpdt=array(
+			'password' => md5($password)
+				    );
+		$where_profile=array(
+				'id' => $client_id
+				 );
+		 $details= $this->common_model->get('user',array('*'),$where_profile);
+		 $update_res=$this->common_model->update('user',$data_to_dpdt,$where_profile);
+		  if($update_res)
+		  {
+				$data_to_store = array(
+					'id' => 1
+				    );
+		                $site_details = $this->sitesetting_model->get_settings();
+				//$get_email_template = $this->common_model->get('email_template',array('*'),$data_to_store);
+				$system_mail = $site_details[0]['system_email'];
+				$mail =$details[0]['email'];
+				$email_content= $this->common_model->get('email_template',array('*'),$data_to_store);
+				$email_body = $email_content[0]['email_body'];
+				$search_val= array("[EMAIL]","[PASSWORD]");
+				$replace_val   = array($details[0]['email'],$password);
+				$newbody = str_replace($search_val, $replace_val, $email_body);
+				$message=$newbody;
+				
+				$this->load->library('email');
+		       
+				  $config['protocol'] = 'sendmail';
+				  $config['charset'] = 'utf-8';
+				  $config['wordwrap'] = TRUE;
+				  $config['mailtype'] = 'html';
+				  
+				  $this->email->initialize($config);
+		       
+				  $this->email->from($system_mail,$site_details[0]['site_name']);
+				  $this->email->to($mail);
+				  
+				  $this->email->subject($email_content[0]['subject']);
+				  $this->email->message($message);	
+				  
+				  $this->email->send();
+		                  $this->session->set_flashdata('flash_message', 'client_password_changed');
+		  }
+		  redirect('client-profile/'.$client_id);
+	 }
+	 public function change_client_status()
+	 {
+		///Account Activation / Deactivation
+		 $client_id=$this->input->post('client_id');
+		 $current_status=$this->input->post('acc_status');
+		 if($current_status==0)
+		 {
+			$dataChange=array(
+				'status' =>'N'
+					    );
+		 }
+		 elseif($current_status==1)
+		 {
+			$dataChange=array(
+				'status' =>'Y'
+					    );
+		 }
+		 $where=array(
+			'id' => $client_id
+			     );
+		 $update_res=$this->common_model->update('user',$dataChange,$where);
+		 if($update_res)
+		 {
+		    $this->session->set_flashdata('flash_message', 'account_updated');
+		 }
+		 redirect('client-profile/'.$client_id);
+	 }
+	 
+	 public function network_page()
+	 {
+		
+		$header['settings'] =$this->sitesetting_model->get_settings();
+		// load HTML header file
+		$this->load->view('HTML_header');
+		// load header file
+		$this->load->view('header',$header);
+		// load template
+		$where_profile=array(
+		'created_by' => $this->session->userdata('site_user_id')
+		 );
+		$data['network_list']=$this->common_model->get('network',array('*'),$where_profile);
+		$data['other_networks']=$this->network_model->get_other_networks($this->session->userdata('site_user_id'));
+		$data['trainer_list']=$this->network_model->get_all_trainers();
+		$this->load->view('network',$data);
+		// load HTML footer file
+		$this->load->view('footer');
+		// load HTML footer file
+		$this->load->view('HTML_footer');
+	 }
+	 
+	 public function create_network()
+	 {
+	    $network_name=$this->input->post('network_name');
+	    $members=$this->input->post('member');
+	    $member_email=$this->input->post('member_email');
+	    $email_array=explode(",",$member_email);
+	    $data_to_store=array(
+		'created_by' => $this->session->userdata('site_user_id'),
+		'network_name' => $network_name,
+		'created_date' => date('Y-m-d H:i:s'),
+		'status' => 'Y'
+				 );
+	    $add_res=$this->common_model->add('network',$data_to_store);
+	    if($add_res!=0)
+	    {
+		$where_profile=array(
+		'id' => $this->session->userdata('site_user_id')
+		 );
+                $user_info=$this->common_model->get('user',array('*'),$where_profile);
+		$data_add_member=array(
+			'network_id' => $add_res,
+			'user_id' => $this->session->userdata('site_user_id'),
+			'user_email' => $user_info[0]['email'],
+			'status' =>'Y'
+				       );
+		$add_member_res=$this->common_model->add('network_member',$data_add_member);
+		if(count($members) > 0)
+		{
+		 foreach($members as $key=>$value)
+		 {
+			$where_profile=array(
+			'id' => $value
+			 );
+			$user_info1=$this->common_model->get('user',array('*'),$where_profile);
+			$data_member=array(
+				'network_id' => $add_res,
+				'user_id' => $value,
+				'user_email' => $user_info1[0]['email'],
+				'status' =>'Y'
+					       );
+			$add_member_res=$this->common_model->add('network_member',$data_member);
+		 }
+		}
+		if($member_email!='')
+		{
+			foreach($email_array as $key=>$value)
+			{
+				$data_member_email=array(
+					'network_id' => $add_res,
+					'user_id' => 0,
+					'user_email' => $value,
+					'status' =>'Y'
+					 );
+				$add_member_res=$this->common_model->add('network_member',$data_member_email);
+			}
+		}
+	    }
+	    redirect('network');
+	 }
+	 
+	 public function add_member_to_network() //// ajax caLL for add more member pop-up
+	 {
+		$network_id=$this->input->post('network_id');
+		$data['total_member']=$this->network_model->get_network_member_details($network_id);
+		$data['trainer_list']=$this->network_model->get_all_trainers();
+		$where=array(
+			'id' => $network_id
+			 );
+		$data['network_info']=$this->common_model->get('network',array('*'),$where);
+		$this->load->view('add_member_to_network',$data);
+	 }
+	 
+	 public function add_extra_member(){  /////Adding more members
+		$network_id=$this->input->post('network_id');
+		$members=$this->input->post('member');
+		foreach($members as $key=>$value)
+		{
+			$where_profile=array(
+				'id' => $value
+				 );
+			$user_info=$this->common_model->get('user',array('*'),$where_profile);
+			$data_member=array(
+				'network_id' => $network_id,
+				'user_id' => $value,
+				'user_email' => $user_info[0]['email'],
+				'status' =>'Y'
+					       );
+			$add_member_res=$this->common_model->add('network_member',$data_member);
+		}
+		redirect('network');
+	 }
+	 
+	 public function change_network_name() ///Editing A Network name
+	 {
+	   $network_name=$this->input->post('network_name');
+	   $network_id=$this->input->post('network_id');
+	   $where=array(
+               'id' => $network_id
+		 );
+	   $data_to_update=array(
+		'network_name' => $network_name
+				 );
+           $update_res=$this->common_model->update('network',$data_to_update,$where);
+	   redirect('network');
+	 }
+	 public function delete_network() //// Network Deletion
+	 {
+	     echo $network_id=$this->input->post('net_id');
+	     $del_res=$this->network_model->delete_network($network_id);
+	     redirect('network');
+	 }
+	 public function add_more_email(){  ////// Adding more member using email id
+	    $user_info=$this->network_model->get_user_information($this->session->userdata('site_user_id'));
+	    $member_email=$this->input->post('member_email');
+	    $network_name=$this->input->post('network_name');
+	    $email_array=explode(",",$member_email);
+	    $network_id=$this->input->post('network_id');
+	    if($member_email != ''){
+		foreach($email_array as $key=>$value)
+		    {
+			    $check_data=array(
+				'network_id' => $network_id,
+				'user_email' => $value
+					      );
+			    $get_existance=$this->common_model->get('network_member',array('*'),$check_data);
+			    if(count($get_existance) == 0)
+			    {
+				$data_member_email=array(
+					'network_id' => $network_id,
+					'user_id' => 0,
+					'user_email' => $value,
+					'status' =>'Y'
+					 );
+				$add_member_res=$this->common_model->add('network_member',$data_member_email);
+				if($add_member_res !=0)
+				{
+				    $data_to_store = array(
+					    'id' => 3
+					);
+				    $site_details = $this->sitesetting_model->get_settings();
+				    //$get_email_template = $this->common_model->get('email_template',array('*'),$data_to_store);
+				    $system_mail = $site_details[0]['system_email'];
+				    $mail =$value;
+				    $email_content= $this->common_model->get('email_template',array('*'),$data_to_store);
+				    $email_body = $email_content[0]['email_body'];
+				    $search_val= array("[NETWORK]","[BYUSER]");
+				    $replace_val   = array($network_name,$user_info[0]['name']);
+				    $newbody = str_replace($search_val, $replace_val, $email_body);
+				    $message=$newbody;
+				    $this->load->library('email');
+			   
+				      $config['protocol'] = 'sendmail';
+				      $config['charset'] = 'utf-8';
+				      $config['wordwrap'] = TRUE;
+				      $config['mailtype'] = 'html';
+				      
+				      $this->email->initialize($config);
+			   
+				      $this->email->from($system_mail,$site_details[0]['site_name']);
+				      $this->email->to($mail);
+				      
+				      $this->email->subject($email_content[0]['subject']);
+				      $this->email->message($message);	
+				      
+				      $this->email->send();
+				}
+			    }
+		    }
+		    redirect('network');
+	    }
+	 }
+	 
+	public function add_member_to_other_network() //// ajax caLL for add more member pop-up in other network tab
+	 {
+		$network_id=$this->input->post('network_id');
+		$data['total_member']=$this->network_model->get_network_member_details($network_id);
+		$data['trainer_list']=$this->network_model->get_all_trainers();
+		$where=array(
+			'id' => $network_id
+			 );
+		$data['network_info']=$this->common_model->get('network',array('*'),$where);
+		$this->load->view('add_more_other',$data);
+	 }
+	public function compose_new_message()  ///////// Composing new message 
+	{
+		$header['settings'] =$this->sitesetting_model->get_settings();
+		// load HTML header file
+		$this->load->view('HTML_header');
+		// load header file
+		$this->load->view('header',$header);
+		$where=array(
+			'id' => $this->session->userdata('site_user_id')
+			     );
+		$data['user_details']= $this->common_model->get('user',array('*'),$where);
+		$where_user=array(
+			'user_id' => $this->session->userdata('site_user_id')
+			     );
+		$data['all_networks']= $this->common_model->get('network_member',array('*'),$where_user);
+		$where_new=array(
+			'created_by' => $this->session->userdata('site_user_id'),
+			'type' => 'C',
+			'status' => 'Y'
+				 );
+		$data['all_clients']= $this->common_model->get('user',array('*'),$where_new);
+		$data['all_sender']=$this->network_model->get_all_msg_sender();
+		$data['latest_sender']=$this->network_model->last_most_message_info();
+		// load template
+		$this->load->view('compose_message',$data);
+		// load HTML footer file
+		$this->load->view('footer');
+		
+		// load HTML footer file
+		$this->load->view('HTML_footer');
+	}
+	
+	public function network_member_delete()
+	{
+		$row_id=$this->input->post('net_mem_id');
+		$where=array(
+			'id' => $row_id
+			     );
+		 $del_res=$this->common_model->delete('network_member',$where);
+		 redirect('network');
+	}
+	public function send_message(){ /////// Code for Sending message 
+		
+		if($this->input->server('REQUEST_METHOD') == 'POST')
+	          {
+			$sender_id=$this->input->post('sender_id');
+			$receiver_id=$this->input->post('receiver_id');
+			$receiver_arr=explode(",",$receiver_id);
+			$message=$this->input->post('message_text');
+			foreach($receiver_arr as $key=>$value)
+			{
+				$msg_to_store=array(
+					'sent_to' => $value,
+					'sent_by' => $sender_id,
+					'message' => $message,
+					'read_status' => 'N',
+					'send_time' => date('Y-m-d H:i:s')
+						    );
+				$add_res=$this->common_model->add('messages',$msg_to_store);
+			}
+			 $this->session->set_flashdata('flash_message', 'message_sent');
+		  }
+		  redirect('compose-message');
+	}
+	
+	///Using ajax Displaying list of messages on clicking over any username in compose-message Page
+	public function get_dynamic_message_list(){
+		$sender_id=$this->input->post('user_id');
+		$data['sender_id']=$sender_id;
+		$this->load->view('message_list_div',$data);
+	}
+	
+       /// Getting Sender List with search value without page refresh using AJAX CALL
+       public function get_dynamic_sender_list()
+       {
+	  $search_text=$this->input->post('search_text');
+	  if($search_text != '')
+	  {
+		$data['all_sender']=$this->network_model->get_all_msg_sender($search_text);
+	  }
+	  else{
+		$data['all_sender']=$this->network_model->get_all_msg_sender();
+	  }
+	  $this->load->view('sender_list_div',$data);
+       }
+
+        public function send_message_to_user()
+	{
+	    	if($this->input->server('REQUEST_METHOD') == 'POST')
+	          {
+			$sender_id=$this->session->userdata('site_user_id');
+			$receiver_id=$this->input->post('to_id');
+			$message=$this->input->post('message');
+			$msg_to_store=array(
+				'sent_to' => $receiver_id,
+				'sent_by' => $sender_id,
+				'message' => $message,
+				'read_status' => 'N',
+				'send_time' => date('Y-m-d H:i:s')
+					    );
+			$add_res=$this->common_model->add('messages',$msg_to_store);
+			$this->session->set_flashdata('flash_message', 'message_sent');
+		  }
+		  redirect('compose-message');
+	}
+	
+	public function get_left_panel()
+	{
+		$search_text=$this->input->post('search_text');
+		$data_to_store = array(
+		'created_by' => $this->session->userdata('site_user_id'),
+		'type' => 'C',
+		'status' => 'Y'
+		);
+		if($search_text=='')
+		{
+		    $data['active_clients']=$this->common_model->get('user',array('*'),$data_to_store);
+		}
+		else
+		{
+		    $data['active_clients']=$this->common_model->get('user',array('*'),$data_to_store,$search_text,'name');	
+		}
+		$this->load->view('active_client',$data);
+		echo "^^";
+		$data_to_store_in = array(
+                'created_by' => $this->session->userdata('site_user_id'),
+                'type' => 'C',
+                'status' => 'N'
+                 );
+		if($search_text=='')
+		{
+		    $data['inactive_clients']=$this->common_model->get('user',array('*'),$data_to_store_in);
+		}
+		else
+		{
+		    $data['inactive_clients']=$this->common_model->get('user',array('*'),$data_to_store_in,$search_text,'name');
+		}  
+		$this->load->view('inactive_client',$data);
+		
+	}
+}
+?>

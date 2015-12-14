@@ -1,0 +1,44 @@
+<?php
+class Trainer_model extends CI_Model {
+ 
+    /**
+    * Responsable for auto load the database
+    * @return void
+    */
+    public function __construct()
+    {
+        $this->load->database();
+    }
+	
+    public function trainer_list()
+    {
+	$this->db->select('*');
+	$this->db->from('user');
+	$this->db->where('type','T');
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    
+    function trainer_info($id)
+    {
+        $this->db->select('*');
+	$this->db->from('user');
+        $this->db->where('id',$id);
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    
+    function update_trainer($id,$data)
+    {
+        $this->db->where('id', $id);
+	$this->db->update('user', $data);
+        
+        return true;
+        
+    }
+    
+    
+}
+?>

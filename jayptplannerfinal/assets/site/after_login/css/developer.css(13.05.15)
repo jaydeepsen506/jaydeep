@@ -1,0 +1,155 @@
+.chosen-choices .search-field .default{
+    height: 42px !important;
+    width:167px !important;
+    }
+#member_chosen{
+    width: 100% !important;
+}
+#trainer_chosen{
+    width: 100% !important;
+}
+#clients_chosen{
+    width: 100% !important;
+}
+
+/*soumojit css (06.05.15)*/
+.lowerlinks, .lowerlinkswh {
+	text-align: left !important;
+}
+.avilable {
+	font-size: 15px;
+}
+.datehead {
+	font-size: 17px;
+}
+/*** 07.05.15**/
+.cncl-btn {
+    	background-color: gray;
+        float: right;
+        border: none;
+        margin-right: 10px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	background-repeat: no-repeat;
+	background-position: 30px center;
+	width: 166px !important;
+	margin: 0 auto;
+	height: 34px;
+	line-height: 35px !important;
+	padding: 0 !important;
+	padding-left: 50px!important;
+	display: inline-block;
+	color: #ffffff !important;
+	font-size: 14px !important;
+	text-align: left;
+	box-shadow: 0 2px #2789cb;
+	-moz-box-shadow: 0 2px #2789cb;
+	-webkit-box-shadow: 0 3px #73777A;
+	font-family:'HelveticaNeue-Regular' !important;
+	text-transform: none !important;
+}
+.repeat-main{
+    float: left;
+    width: 100%;
+}
+
+/*soumojit css(08.05.15)*/
+.messagecount {
+	font-size: 11px;
+}
+.tab-outer .tab-header .messagecount {
+	line-height: 18px;
+}
+.listing-left h5 {
+	font-size: 16px;
+}
+.listing-left h4 {
+	font-size: 18px;
+}
+.del.add-bg {
+	background: #22a7f0;
+	border-radius: 50%;
+    font-size: 11px;
+    height: 25px;
+    line-height: 24px;
+    text-align: center;
+    width: 25px;
+	
+}
+.del.add-bg .fa-trash-o, .crea.add-bg .fa-pencil {
+	color: #fff;
+	text-align: center;
+}
+.add-bg {
+	background: #98c23e;
+	border-radius: 50%;
+    font-size: 11px;
+    height: 25px;
+    line-height: 24px;
+    text-align: center;
+    width: 25px;
+    margin: 0 3px;
+}
+.notohead, .Earlier {
+	font-size: 12px;
+}
+.bookhead {
+	font-size: 16px;
+}
+.afterhead {
+	font-size: 12px;
+	line-height: 19px;
+}
+.bookable {
+	font-size: 12px;
+	margin-bottom: 3px;
+}
+.lowerlinks li a {
+	font-size: 13px;
+}
+
+/*somumojit css starts (12.05.15)*/
+#myTab a {
+    transition: none 0s ease 0s ;
+}
+.add-bg img {
+    width: 11px;
+}
+.inboxpanel .del {
+	width: auto;
+}
+.progress_title .fa-repeat, .progress_title .fa-remove {
+	margin-right: 5px;
+}
+.exc:before {
+	height: 12px;
+	width: 12px;
+	background-size: 12px auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,105 @@
+<?php
+class Dashboard extends CI_Controller {
+
+	public function __construct()
+	{
+		parent::__construct();
+		
+		if(!$this->session->userdata('is_site_logged_in')){
+			redirect('home');
+		}
+		// load models
+		$this->load->model('sitesetting_model');
+		$this->load->model('contactsetting_model');
+		$this->load->model('common_model');
+	}
+	function index()
+	{
+		if ($this->input->server('REQUEST_METHOD') === 'POST')
+		{
+			
+		}
+		$header['settings'] =$this->sitesetting_model->get_settings();
+		// load HTML header file
+		$this->load->view('HTML_header');
+		// load header file
+		$this->load->view('header',$header);
+		// load template
+		$this->load->view('dashboard');
+		// load HTML footer file
+		$this->load->view('footer');
+		
+		// load HTML footer file
+		$this->load->view('HTML_footer');
+	}
+	function add_client()
+	{
+		if ($this->input->server('REQUEST_METHOD') === 'POST')
+		{
+			$data_to_store = array(
+			'email' => trim($this->input->post('email'))
+		    );
+		   $user_id = $this->session->userdata('site_user_id');
+		    // getting user info
+		    $user_info = $this->common_model->get('user',array('*'),$data_to_store);
+		     $password=random_string('alnum',10);
+		    if(count($user_info) == 0)
+		    {
+			$data_to_store = array(
+				'name' => trim($this->input->post('name_val')),
+				'type' => 'C',
+				'created_by' => $user_id,
+				'email' => trim($this->input->post('email')),
+				'password' => md5($password),
+				'created_date' => date("Y-m-d"),
+				'status' => 'Y'
+				
+			    );
+	
+			    // getting user info
+			    $user_insrt = $this->common_model->add('user',$data_to_store);
+			    if($user_insrt)
+			    {
+				$data_to_store = array(
+					'id' => 1
+				    );
+				$site_details = $this->sitesetting_model->get_settings();
+				//$get_email_template = $this->common_model->get('email_template',array('*'),$data_to_store);
+				$system_mail = $site_details[0]['system_email'];
+				$mail =$this->input->post('email');
+				$email_content= $this->common_model->get('email_template',array('*'),$data_to_store);
+				$email_body = $email_content[0]['email_body'];
+				$search_val= array("[EMAIL]","[PASSWORD]");
+				$replace_val   = array($this->input->post('email'),$password);
+				$newbody = str_replace($search_val, $replace_val, $email_body);
+				$message=$newbody;
+				
+				$this->load->library('email');
+		       
+				  $config['protocol'] = 'sendmail';
+				  $config['charset'] = 'utf-8';
+				  $config['wordwrap'] = TRUE;
+				  $config['mailtype'] = 'html';
+				  
+				  $this->email->initialize($config);
+		       
+				  $this->email->from($system_mail,$site_details[0]['site_name']);
+				  $this->email->to($mail);
+				  
+				  $this->email->subject($email_content[0]['subject']);
+				  $this->email->message($message);	
+				  
+				  $this->email->send();
+				
+				$this->session->set_flashdata("flash_message",'client_created');
+			    }
+			  
+		    }
+		    else{
+			$this->session->set_flashdata("flash_message",'email_exits');
+		    }
+		      redirect("dashboard");
+		}
+		
+	}
+}

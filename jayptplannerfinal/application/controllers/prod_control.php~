@@ -1,0 +1,47 @@
+<?php
+
+class prod_control extends CI_Controller {
+
+    /**
+    * Check if the user is logged in, if he's not, 
+    * send him to the login page
+    * @return void
+    */	
+        function __construct()
+	{	
+		parent::__construct();
+		$this->load->model("prod_model");
+	}
+    
+    
+
+
+       function storesetting()
+	{
+		$data['data']['userdata']= $this->prod_model->view_store();
+		$data['view_link']='add_store';
+		$this->load->view('includes/template',$data);
+	}
+	
+	function instore()
+	{
+		//$data['data']['userdata']= $this->prod_model->view_store();
+		$data['view_link']='addme';
+		$this->load->view('includes/template',$data);
+	}
+	function insertdata()
+	{
+		$data['data']['userdata']= $this->prod_model->ins_store();
+		$data['view_link']='addme';
+		$this->load->view('includes/template',$data);
+	}
+
+
+
+
+
+
+
+
+}
+

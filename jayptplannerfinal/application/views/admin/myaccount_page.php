@@ -1,0 +1,88 @@
+<!--|
+| Copyright © 2014 by Esolz Technologies
+| Author :  debojit.talukdar@esolzmail.com
+|
+|	http://www.esolz.net/
+|
+| All rights reserved. This page is used for edit  my account info.
+|--> 
+<section id="main-content">
+        <section class="wrapper">
+
+		<?php
+        //flash messages
+        $flash_message=$this->session->flashdata('flash_message');
+        if(isset($flash_message)){
+
+            if($flash_message == 'info_updated')
+            {
+		echo '<div class="alert alert-success">';
+                echo '<i class="icon-ok-sign"></i><strong>Success!</strong>Info has been successfully updated.';
+                echo '</div>';
+          
+            }
+            if($flash_message == 'info_not_updated'){
+		echo'<div class="alert alert-error">';
+                echo'<i class="icon-remove-sign"></i><strong>Error!</strong> in updation. Please try again.';        
+                echo'</div>';
+    
+            }
+
+            if($flash_message == 'error'){
+		echo'<div class="alert alert-error">';
+                echo'<i class="icon-remove-sign"></i><strong>Error!</strong> . Please try again.';        
+                echo'</div>';
+      
+            }
+                    
+        }
+    ?>
+            <!-- page start-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            Personal info
+                            
+                        </header>
+                        <div class="panel-body">
+                            <div class="form">
+                                <form class="cmxform form-horizontal " id="myinfo" method="post" action="<?php echo base_url(); ?>control/myaccount/updt">
+                                    <div class="form-group ">
+                                        <label for="firstname" class="control-label col-lg-3">Firstname</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" name="first_name" id="firstname" value="<?php echo $myaccount_data[0]['first_name']; ?>" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="lastname" class="control-label col-lg-3">Lastname</label>
+                                        <div class="col-lg-6">
+                                            <input class=" form-control" name="last_name" id="lastname" value="<?php echo $myaccount_data[0]['last_name']; ?>" type="text" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group ">
+                                        <label for="email" class="control-label col-lg-3">Email</label>
+                                        <div class="col-lg-6">
+                                            <input class="form-control " name="email_addres" id="email" value="<?php echo $myaccount_data[0]['email_addres']; ?>" type="email" />
+                                        </div>
+                                    </div>
+                                    
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-3 col-lg-6">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                            <button class="btn btn-default" type="button" onclick="location.href='<?php echo base_url();?>control/dashboard';">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+				
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        </section>
+    </section>

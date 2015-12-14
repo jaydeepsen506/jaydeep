@@ -1,0 +1,14 @@
+.chosen-choices .search-field .default{
+    height: 42px !important;
+    width:167px !important;
+    }
+#member_chosen{
+    width: 100% !important;
+}
+#trainer_chosen{
+    width: 100% !important;
+}
+#clients_chosen{
+    width: 100% !important;
+}
+

@@ -1,0 +1,23 @@
+<?php
+class Home extends CI_Controller {
+
+	public function __construct()
+	{
+		parent::__construct();
+		
+		if($this->session->userdata('is_site_logged_in')){
+			redirect('dashboard');
+		}
+		// load models
+		$this->load->model('common_model');
+	}
+	function index()
+	{
+		$data['data']['about_us'] = $this->common_model->get('pages',array('*'),array('page_alias'=>'about-us','status'=> 'Y'));
+		$data['data']['testimonials'] = $this->common_model->get('testimonials',array('*'),array('status'=> 'Y'),null,null,null,null,null,null,'id','asc');
+		$data['view_link'] = 'home';
+		// load template
+		$this->load->view('site_includes/template', $data);
+		
+	}
+}

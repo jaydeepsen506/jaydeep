@@ -1,0 +1,65 @@
+
+	$(document).ready(function() {
+		
+		// select-box
+        $('.selectpicker').selectpicker();
+        
+        
+		
+	 });
+	 
+	 
+	
+	//Footer fixed	
+	$(window).bind("load", function() {        
+       var footerHeight = 0,
+           footerTop = 0,
+           $footer = $(".footer");           
+       positionFooter();       
+       function positionFooter() {       
+            footerHeight = $footer.height();
+            footerTop = ($(window).scrollTop()+$(window).height()-footerHeight)+"px";       
+           if ( ($(document.body).height()+footerHeight) < $(window).height()) {
+               $footer.css({
+                    position: "fixed",
+                    bottom: "0px", 
+                    left: "0", 
+                    right: "0"
+               })
+           } else {
+               $footer.css({
+                    position: "relative",
+                    display: "block"
+               })
+           }               
+       }
+       $(window)
+	       .scroll(positionFooter)
+	       .resize(positionFooter)
+               
+	});
+	
+
+
+
+
+$(document).ready(function() {
+	$(".tab-header ul li").click(function(){
+		$('.tab-content').removeClass('active');
+		$('.tab-header ul li').removeClass('active');
+		$(this).addClass('active');
+		var getdata = $(this).attr('data');		
+		$('#'+getdata).addClass('active');
+	});
+});
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1123 @@
+  <style type="text/css" media="all">
+    .black-cl{
+      color:black !important;
+    }
+    .txt-box-set{
+      height: 25px !important;
+      width: 149px !important;
+    }
+    .labl-set{
+      padding-left: 0;
+      vertical-align: middle;
+      width: 36%;
+    }
+    </style>
+  <?php
+  $ci=&get_instance();
+  $ci->load->model('toolbox_model');
+  $ci->load->model('common_model');
+  ?>
+  <script>
+    function get_edit_popup(meal_id)
+    {
+        var dataString ="meal_id="+meal_id;
+        $.ajax
+        ({
+        type: "POST",
+        url: "<?php echo base_url();?>toolbox/get_edit_popup",
+        data: dataString,
+        cache: false,
+        success: function(data)
+        {
+               $('#edit_form_body').html(data);
+               $('#edit_hyper').click();
+        }
+        });
+    }
+  </script>
+  <div id="page-wrapper">
+    <div class="container-fluid tabouterdiv">
+      <!-- Page Heading -->
+      <div class="row">
+        <div class="tabbut">
+          <ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li role="presentation" class="active"><a href="#tramnning" aria-controls="tramnning" role="tab" data-toggle="tab"><span class="tramnning"></span>TRAINING</a></li>
+            <li role="presentation"><a href="#diet" aria-controls="diet" role="tab" data-toggle="tab"><span class="diet"></span>DIET</a></li>
+          </ul>
+        </div>
+        <div class="tab-content">
+          <div class="row customwidth tab-pane active" role="tabpanel" id="tramnning">
+            <div class="col-md-7 col-xs-12 leftsidetab">
+              <div class="innerblog clearfix">
+                <div class="clearfix gaplower">
+                  <div class="col-sm-6 col-xs-12">
+                    <div class="appoin_txt">EXERCISE PROGRAMS</div>
+                  </div>
+                  <div class="col-sm-6 col-xs-12">
+                    <div class="buttongeneral_tool"><a class="butsblue" href="#" data-target="#EXERCISE-INFORMATION" data-toggle="modal">New Routine</a></div>
+                  </div>
+                </div>
+                <div class="clearfix ">
+                  <div class="col-xs-12">
+                    <div class="bs-example">
+                      <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"> <span>Leg Program</span> <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="collapsed">Edit Routine Info<i class="fa fa-fw fa-caret-down"></i></a> </h4>
+                          </div>
+                          <div id="collapseOne" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Armhävningar </div>
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande hantelpress</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande flyes</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Tricepsdips</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Cable Cross</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Pushdowns</div>
+                                
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"> <span>Chest Program</span> <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" >Edit Routine Info<i class="fa fa-fw fa-caret-down"></i></a> </h4>
+                          </div>
+                          <div id="collapseTwo" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Armhävningar </div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande hantelpress</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande flyes</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Tricepsdips</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Cable Cross</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Pushdowns</div>
+                                
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"> <span>Styrkeprogram C - Core och Ben</span> <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed">Edit Routine Info<i class="fa fa-fw fa-caret-down"></i></a> </h4>
+                          </div>
+                          <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Armhävningar </div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande hantelpress</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande flyes</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Tricepsdips</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Cable Cross</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Pushdowns</div>
+                                
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"> <span>Rippetoe Starting Strength - Pass A</span> <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" class="collapsed">Edit Routine Info<i class="fa fa-fw fa-caret-down"></i></a> </h4>
+                          </div>
+                          <div id="collapseFour" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Armhävningar </div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande hantelpress</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande flyes</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Tricepsdips</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Cable Cross</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Pushdowns</div>
+                                
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"> <span>Rippetoe Starting Strength - Pass B</span> <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" class="collapsed">Edit Routine Info<i class="fa fa-fw fa-caret-down"></i></a> </h4>
+                          </div>
+                          <div id="collapseFive" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Armhävningar </div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande hantelpress</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Liggande flyes</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Tricepsdips</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Cable Cross</div>
+                                
+                                
+                              </div>
+                              <div class="editblog">
+                                <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt="" /></div>
+                                <div class="workouttxt">Pushdowns</div>
+                                
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 col-xs-12">
+              <div class="innerblogtool clearfix">
+                <div class="clearfix gaptool">
+                  <div class="col-sm-4 col-xs-12">
+                    <div class="appoin_txt">EXERCISES</div>
+                  </div>
+                  <div class="col-sm-8 col-xs-12">
+                    <div class="buttongeneral_tool"><a class="butsblue" href="#">New Exercise</a></div>
+                  </div>
+                </div>
+                <div class="searchbgright">
+                  <button class="custombutton diffcolor" type="button" name=""><i class="fa fa-fw fa-search"></i></button>
+                  <div class="searchfieldouter">
+                    <input type="text" onClick="if(this.value=='SEARCH EXERCISE') this.value = ''; " onBlur=" if(this.value=='') this.value = 'SEARCH EXERCISE';" value="SEARCH EXERCISE" class="custfield diffcolor diffsize" name="">
+                  </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                  <div class="wonbut"> <a href="#">Own</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Axelpress med hantlar</div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                  <div class="wonbut"> <a href="#">Own</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+                <div class="editblog">
+                  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#">Edit</a> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row customwidth tab-pane" role="tabpanel" id="diet">
+            <div class="col-md-7 col-xs-12 leftsidetab">
+              <div class="innerblog clearfix">
+                <div class="clearfix gaplower">
+                  <div class="col-sm-6 col-xs-12">
+                    <div class="appoin_txt">MEALS</div>
+                  </div>
+                  <div class="col-sm-6 col-xs-12">
+                    <div class="buttongeneral_tool"><a class="butsblue" href="javascript:void(0)" data-toggle="modal" data-target="#MEAL-INFORMATION">Add meal</a></div>
+                  </div>
+                </div>
+                <div class="clearfix ">
+                  <script>
+                    function search_meal(meal_val)
+                    {
+                       	var dataString ="search_text="+meal_val;
+			$.ajax
+			({
+			type: "POST",
+			url: "<?php echo base_url();?>toolbox/get_meal_list_ajax",
+			data: dataString,
+			cache: false,
+			success: function(data)
+			{
+			       $('#meal_listing').html(data);
+			}
+			});
+                    }
+                  </script>
+                  <script>
+                    function get_edit_right_section(field_id)
+                    {
+                      	var dataString ="meal_id="+field_id;
+                        $.ajax
+			({
+			type: "POST",
+			url: "<?php echo base_url();?>toolbox/get_edit_right_section",
+			data: dataString,
+			cache: false,
+			success: function(data)
+			{
+			       $('#right_panel').html(data);
+			}
+			});
+                    }
+                  </script>
+                  <div class="col-xs-12">
+                    <div class="searchbgright">
+                      <button class="custombutton diffcolor" type="button" name=""><i class="fa fa-fw fa-search"></i></button>
+                      <div class="searchfieldouter">
+                        <!--<input type="text" onClick="if(this.value=='SEARCH MEALS') this.value = ''; " onBlur=" if(this.value=='') this.value = 'SEARCH MEALS'; " value="SEARCH MEALS" class="custfield diffcolor diffsize" name="">-->
+                        <input type="text" value="" class="custfield diffcolor diffsize" name="search_meal" id="search_meal" onChange="search_meal(this.value)" onkeypress="search_meal(this.value)" onkeyup="search_meal(this.value)" placeholder="SEARCH MEALS" style="text-transform:none;">
+                      </div>
+                    </div>
+                    <div id="meal_listing">
+                      <?php
+                      foreach($meals as $meal)
+                      {
+                        $image=$ci->toolbox_model->get_meal_images($meal['id']);
+                      ?>
+                    <a href="javascript:void(0)" onclick="get_edit_right_section(<?php echo $meal['id'];?>)">
+                    <div class="editblog">
+                      <div class="workimg"><img alt="" <?php  if(count($image) > 0) { ?> src="<?php echo base_url();?>meal_images/<?php echo $image[0]['filename'];?>" <?php }elseif(count($image) == 0) { ?> src="<?php echo base_url();?>assets/site/after_login/images/no-image.gif" <?php } ?>style="height:50px; width:50px;"></div>
+                      <div class="workouttxt"><?php echo $meal['title'];?></div>
+                      <div class="editright fc"> <a href="javascript:void(0)" onclick="get_edit_popup(<?php echo $meal['id'];?>)">Edit</a> </div>
+                    </div>
+                    </a>
+                    <?php
+                      }
+                    ?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <script>
+              function submit_right_side_edit_form() {
+               var frm=document.meal_right_section;
+               frm.submit();
+              }
+            </script>
+            <script>
+$(document).ready(function(){
+$("#meal_image_right").change(function()
+ {
+	//alert("check");
+    var src=$("#meal_image_right").val();
+    if(src!="")
+    {
+        formdata= new FormData();
+        var numfiles=this.files.length;
+        var i, file, progress, size;
+        for(i=0;i<numfiles;i++)
+        {
+        file = this.files[i];
+        size = this.files[i].size;
+        name = this.files[i].name;
+        if (file.type.match(/image.*/))
+        {
+        if((Math.round(size))<=(1024*1024))
+        {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = function(e){
+                var image = $('<img>').attr('src',e.target.result);
+                };
+                formdata.append("file[]", file);
+                if(i==(numfiles-1))
+                {
+                  $('#waiting_div_right').html('Please Wait while uploading......');
+                $.ajax({
+                        url: "<?php echo base_url(); ?>toolbox/image_upload",
+                        type: "POST",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        success: function(res){
+                          $('#waiting_div_right').html('');
+                          var str=res.substring(0, res.length-1);
+                          var array=str.split(',');
+                          for(var i=0;i < array.length;i++)
+                           {  
+                                var count_img=parseInt(document.getElementById('count_image_right').value);
+                                var new_count=count_img+1;
+                                var filename=array[i];
+                            	var iDiv = document.createElement('div');
+				var jDiv = document.createElement('div');
+                                var kDiv = document.createElement('img');
+                                var mDiv = document.createElement('div');
+				iDiv.className = 'uploadedsingle';
+                                jDiv.className = 'imguploaded';
+                                mDiv.className = 'Uptxt';
+                                mDiv.innerHTML='Picture'+new_count;
+                                kDiv.src= '<?php echo base_url();?>/meal_images/'+array[i];
+                                kDiv.style.height = '80px';
+				kDiv.style.width = '80px';
+                                iDiv.appendChild(jDiv);
+                                iDiv.appendChild(mDiv);
+                                jDiv.appendChild(kDiv);
+                                $("#main_image_div_right").append(iDiv);
+                                document.getElementById('count_image_right').value=new_count;
+                            }
+                            document.getElementById('uploaded_image_name_right').value=document.getElementById('uploaded_image_name_right').value+","+str;
+				if(res=="0")
+				{
+				   alert("Error in upload. Retry");
+				}
+                        }
+                        });
+                }
+        }
+        else
+        {
+		alert(name+"Size limit exceeded");
+		return;
+        }
+        }
+        else
+        {
+		alert(name+"Not a valid file");
+		return;
+        }
+        }
+    }
+    else
+    {
+    alert("Select a valid file");
+    return;
+    }
+    return false;
+});
+});
+</script>
+            <div class="col-md-5 col-xs-12">
+              <div class="innerblogtool innerblogtooldiet clearfix">
+                <div class="clearfix gaplower" id="right_panel">
+                  <div class="col-xs-12">
+                    <form name="meal_right_section" id="meal_right_section" method="POST" action="<?php echo base_url(); ?>toolbox/edit_meal_right" enctype="multipart/form-data">
+                    <div class="appoin_txt">MEALS</div>
+                    <div class="datehead"><input type="text" name="meal_title_right" id="meal_title_right" class="form-control" value="<?php echo $meal_one_record[0]['title']; ?>" style="display: none;"><div id="title_right"><?php echo $meal_one_record[0]['title']; ?></div></div>
+                    <div class="descriptiohead"> <span>DESCRIPTION</span></div>
+                    <div class="descriptiotxt"><textarea name="meal_desc_right" id="meal_desc_right" class="form-control" rows="9" style="width: 100%;;display:none;"><?php echo $meal_one_record[0]['description']; ?></textarea><div id="desc_right"><?php echo $meal_one_record[0]['description']; ?></div></div>
+                    <div class="descriptiohead"><span>PICTURES</span><b>
+                      <!--<input type="file" name="meal_image_right[]" id="meal_image_right" multiple="multiple">-->
+                      </b></div>
+                    <div id="waiting_div_right"></div>
+                    <div class="uploadedpic" id="main_image_div_right">
+                      <?php
+                        $where_images=array(
+                             'meal_id' => $meal_one_record[0]['id']
+                                          );
+                        $meal_images=$ci->common_model->get('meal_images',array('*'),$where_images,null,null,null,null,null,null,'id','ASC');
+                        $image_i=1;
+                        foreach($meal_images as $image)
+                        {
+                      ?>
+                      <div class="uploadedsingle">
+                        <div class="imguploaded"><img src="<?php echo base_url();?>meal_images/<?php echo $image['filename'];?>" alt="" style="height:80px;"></div>
+                        <div class="Uptxt">Picture<?php echo $image_i;?></div>
+                      </div>
+                      <?php
+                         $image_i++;
+                        }
+                      ?>
+                    </div>
+                        <input type="hidden" name="count_image_right" id="count_image_right" value="<?php echo count($meal_images); ?>">
+                        <input type="hidden" name="meal_id_right" id="meal_id_right" value="<?php echo $meal_one_record[0]['id']; ?>">
+                        <input type="hidden" name="uploaded_image_name_right" id="uploaded_image_name_right" value="">
+                    <div class="clearfix">
+                      <!--<div class="pull-right"><a href="javascript:void(0)" class="greenblue" onclick="submit_right_side_edit_form()">Save Changes</a></div>-->
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+    <div class="copytext2 hidden-lg hidden-md">© 2015 PT-Planner AB</div>
+  </div>
+  
+  
+  <div class="modal fade" id="EXERCISE-INFORMATION" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-left" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+        	<div class="col-sm-6">
+        		<div class="appoin_txt">PROGRAM NAME</div>
+                    <div class="datehead">Power Chest</div>
+                    <div class="editblog">
+					  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+					  <div class="workouttxt">Armhävningar </div>
+					  <div class="editright">
+					    <a href="#"><img src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png" alt=""></a>
+					  </div>
+					</div>
+					<div class="editblog">
+					  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+					  <div class="workouttxt">Armhävningar </div>
+					  <div class="editright">
+					    <a href="#"><img src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png" alt=""></a>
+					  </div>
+					</div>
+					<div class="editblog">
+					  <div class="workimg"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg"></div>
+					  <div class="workouttxt">Armhävningar </div>
+					  <div class="editright">
+					    <a href="#"><img src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png" alt=""></a>
+					  </div>
+					</div>
+					<div class="editblog">
+					  <div class="workimg"><img alt="" src="images/workout.jpg"></div>
+					  <div class="workouttxt">Armhävningar </div>
+					  <div class="editright">
+					    <a href="#"><img src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png" alt=""></a>
+					  </div>
+					</div>
+					<div class="editblog">
+					  <div class="workimg"><img alt="" src="images/workout.jpg"></div>
+					  <div class="workouttxt">Armhävningar </div>
+					  <div class="editright">
+					    <a href="#"><img src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png" alt=""></a>
+					  </div>
+					</div>
+					<div class="editblog">
+					  <div class="workimg"><img alt="" src="images/workout.jpg"></div>
+					  <div class="workouttxt">Armhävningar </div>
+					  <div class="editright">
+					    <a href="#"><img src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png" alt=""></a>
+					  </div>
+					</div>
+        	</div>
+        	<div class="col-sm-6">
+        		<div class="searchbgright">
+                  <button name="" type="button" class="custombutton diffcolor"><i class="fa fa-fw fa-search"></i></button>
+                  <div class="searchfieldouter">
+                    <input type="text" name="" class="custfield diffcolor diffsize" value="SEARCH EXERCISE" onblur=" if(this.value=='') this.value = 'SEARCH EXERCISE';" onclick="if(this.value=='SEARCH EXERCISE') this.value = ''; ">
+                  </div>
+                </div>
+                <div class="editblog">
+                    <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt=""></div>
+                    <div class="workouttxt">Armhävningar </div>
+                    <div class="editright">
+                        <a href="#"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png"></a>
+                    </div>
+                </div>
+                <div class="editblog">
+                    <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt=""></div>
+                    <div class="workouttxt">Armhävningar </div>
+                    <div class="editright">
+                        <a href="#"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png"></a>
+                    </div>
+                </div>
+               <div class="editblog">
+                  <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt=""></div>
+                  <div class="workouttxt">Armhävningar </div>
+                  <div class="editright"> <a href="#"><img alt="" src="images/strapicon.png"></a> </div>
+                  <div class="wonbut"> <a href="#">Own</a> </div>
+                </div>
+                <div class="editblog">
+                    <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt=""></div>
+                    <div class="workouttxt">Armhävningar </div>
+                    <div class="editright">
+                        <a href="#"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png"></a>
+                    </div>
+                </div>
+                <div class="editblog">
+                    <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt=""></div>
+                    <div class="workouttxt">Armhävningar </div>
+                    <div class="editright">
+                        <a href="#"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png"></a>
+                    </div>
+                </div>
+                <div class="editblog">
+                    <div class="workimg"><img src="<?php echo base_url();?>assets/site/after_login/images/workout.jpg" alt=""></div>
+                    <div class="workouttxt">Armhävningar </div>
+                    <div class="editright">
+                        <a href="#"><img alt="" src="<?php echo base_url();?>assets/site/after_login/images/strapicon.png"></a>
+                    </div>
+                </div>
+        		
+        		<div class="btns">
+        			<a href="#" class="butsblue red">Delete Program</a>
+        			<a href="#" class="butsblue green">Save Changes</a>
+        		</div>
+        		
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
+<script>
+  function add_more_div()
+  {
+       var count=document.getElementById('count_div').value;
+       var recount=parseInt(count)+1;
+       var dataString="count="+recount;
+        $.ajax
+            ({
+            type: "POST",
+            url: "<?php echo base_url();?>toolbox/get_more_div",
+            data: dataString,
+            cache: false,
+            success: function(data)
+            {
+                   //alert(data);
+                   $('#main_repeat_div').append(data);
+                   $('#count_div').val(recount);
+            }
+            });
+  }
+  function remove_div(e)
+  {
+          //alert('hi');
+          var count=document.getElementById('count_div').value;
+          var recount=parseInt(count)-1;
+          $(e).parents('.repeat-main').remove();
+          $('#count_div').val(recount);
+  }
+</script>
+<script>
+   function meal_validation() {
+    //code
+    var frm=document.addMealForm;
+    if (frm.meal_title.value.search(/\S/) == '-1') {
+        document.getElementById('title_error').innerHTML='Please Enter Meal Title';
+        frm.meal_title.focus();
+        return false;
+    }
+    else
+    {
+        document.getElementById('title_error').innerHTML='';
+    }
+    if (frm.meal_desc.value.search(/\S/) == '-1') {
+        document.getElementById('desc_error').innerHTML='Please Enter Meal Description';
+        frm.meal_desc.focus();
+        return false;
+    }
+    else
+    {
+        document.getElementById('desc_error').innerHTML='';
+    }
+    var specifical = document.getElementsByName('specifically[]');
+    var meal_amount=document.getElementsByName('meal_amount[]');
+    var len = specifical.length;
+    var len1= meal_amount.length;
+    if (len==1)
+    {
+            if (specifical[0].value=='' && meal_amount[0].value=='') {
+                    document.getElementById('error_spe0').innerHTML='Add Specifical';
+                    document.getElementById('specifically0').style.borderColor='red';
+                    document.getElementById('error_amt0').innerHTML='Add Amount';
+                    document.getElementById('meal_amount0').style.borderColor='red';
+                    return false;
+            }
+            else if (specifical[0].value=='' && meal_amount[0].value!='')
+            {
+                    document.getElementById('error_spe0').innerHTML='Add Specifical';
+                    document.getElementById('specifically0').style.borderColor='red';
+                    document.getElementById('error_amt0').innerHTML='';
+                    document.getElementById('meal_amount0').style.border='1px solid #ccc';
+                    return false;
+            }
+            else if (specifical[0].value!='' && meal_amount[0].value=='') {
+              
+                    document.getElementById('error_amt0').innerHTML='Add Amount';
+                    document.getElementById('meal_amount0').style.borderColor='red';
+                    document.getElementById('error_spe0').innerHTML='';
+                    document.getElementById('specifically0').style.border='1px solid #ccc';
+                    return false;
+            }
+            else if (specifical[0].value!='' && meal_amount[0].value!='')
+            {
+                    //if (isNaN(parseInt(meal_amount[0].value)))
+                    //{
+                    //        document.getElementById('error_amt0').innerHTML='Amount should be in number';
+                    //        document.getElementById('meal_amount0').style.borderColor='red';
+                    //        document.getElementById('error_spe0').innerHTML='';
+                    //        document.getElementById('specifically0').style.border='1px solid #ccc';
+                    //        return false;
+                    //}
+                    //else
+                    //{
+                            document.getElementById('error_amt0').innerHTML='';
+                            document.getElementById('meal_amount0').style.border='1px solid #ccc';
+                            document.getElementById('error_spe0').innerHTML='';
+                            document.getElementById('specifically0').style.border='1px solid #ccc';
+                    //}
+            }
+    }
+    else if(len>1)
+    {
+            for (var i=0; i<len; i++)
+             {
+              //alert(i);
+                    
+                      if (specifical[i].value=='' && meal_amount[i].value=='') {
+                              document.getElementById('error_spe'+i).innerHTML='Add Specifical';
+                              document.getElementById('specifically'+i).style.borderColor='red';
+                              document.getElementById('error_amt'+i).innerHTML='Add Amount';
+                              document.getElementById('meal_amount'+i).style.borderColor='red';
+                              return false;
+                      }
+                      else if (specifical[i].value=='' && meal_amount[i].value!='')
+                      {
+                              document.getElementById('error_spe'+i).innerHTML='Add Specifical';
+                              document.getElementById('specifically'+i).style.borderColor='red';
+                              document.getElementById('error_amt'+i).innerHTML='';
+                              document.getElementById('meal_amount'+i).style.border='1px solid #ccc';
+                              return false;
+                      }
+                      else if (specifical[i].value!='' && meal_amount[i].value=='') {
+                        
+                              document.getElementById('error_amt'+i).innerHTML='Add Amount';
+                              document.getElementById('meal_amount'+i).style.borderColor='red';
+                              document.getElementById('error_spe'+i).innerHTML='';
+                              document.getElementById('specifically'+i).style.border='1px solid #ccc';
+                              return false;
+                      }
+                      else if (specifical[i].value!='' && meal_amount[i].value!='')
+                      {
+                              if (isNaN(meal_amount[i].value))
+                              {
+                                      document.getElementById('error_amt'+i).innerHTML='Amount should be in number';
+                                      document.getElementById('meal_amount'+i).style.borderColor='red';
+                                      document.getElementById('error_spe'+i).innerHTML='';
+                                      document.getElementById('specifically'+i).style.border='1px solid #ccc';
+                                      return false;
+                              }
+                              else
+                              {
+                                      document.getElementById('error_amt'+i).innerHTML='';
+                                      document.getElementById('meal_amount'+i).style.border='1px solid #ccc';
+                                      document.getElementById('error_spe'+i).innerHTML='';
+                                      document.getElementById('specifically'+i).style.border='1px solid #ccc';
+                              }
+                      }
+             }
+    }
+     if (frm.instruction.value.search(/\S/) == '-1') {
+        document.getElementById('ins_error').innerHTML='Please Enter Instruction';
+        frm.instruction.focus();
+        return false;
+    }
+    else
+    {
+        document.getElementById('ins_error').innerHTML='';
+    }
+    frm.submit();
+   }
+</script>
+<div class="modal fade" id="MEAL-INFORMATION" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-left" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+           <form name="addMealForm" id="addMealForm" method="POST" action="<?php echo base_url();?>toolbox/add_meal" enctype="multipart/form-data">
+        	<div class="col-sm-6">
+        	    <div class="appoin_txt">MEAL INFORMATION</div>
+                    <div class="datehead"><input type="text" class=form-control name="meal_title" id="meal_title"><div id="title_error" style="color:red;font-size: 14px;font-family: 'HelveticaNeue-Light';"></div></div>
+                    <div class="descriptiohead"> <span>DESCRIPTION</span> </div>
+                    <div class="descriptiotxt"> <textarea name="meal_desc" id="meal_desc" class=form-control ></textarea><div id="desc_error" style="color:red"></div></div>
+                    <div class="descriptiohead"><span>PICTURES</span><b>Upload
+                      <input type="file" name="meal_image[]" id="meal_image" multiple="multiple">
+                    </b>
+                    </div>
+                    <div id="waiting_div"></div>
+                    <div class="uploadedpic" id="main_img_div">
+                    </div>
+        	</div>
+        	<div class="col-sm-6">
+        		<div class="appoin_txt">STANDAR MEASUREMENT</div>
+        		<div class="table-outer">
+        			<div class="rate-table">
+                                  <div id="main_repeat_div">
+                                    <div id="repeat_section" class="repeat-main">
+        				<div class="rate-table-row">
+        					<div class="rate-table-td labl-set">
+                                                  <span class="descriptiohead black-cl">
+        						Specifically
+                                                  </span>
+        					</div>
+                                                
+                                                <div class="rate-table-td text-right">
+        						<input type="text" name="specifically[]" id="specifically0" class="form-control txt-box-set">
+                                                           <div id="error_spe0" style="font-size: 11px;color: red;"></div>
+        					</div>
+        				</div>
+                                        <div class="rate-table-row" style="float: right;"> 
+                                              <div class="rate-table-td text-right" style="padding-right: 0; font-size: 12px; cursor: pointer" onclick="remove_div(this)">
+        						X<span class="descriptiohead">  Remove</span>
+        				      </div>
+                                        </div>
+        				<div class="rate-table-row" style="float: left;">
+        					<div class="rate-table-td labl-set" >
+        					  <span class="descriptiohead black-cl">
+        						Amount
+                                                  </span>
+        					</div>
+                                                <div class="rate-table-td text-right">
+        						<input type="text" name="meal_amount[]" id="meal_amount0" class="form-control txt-box-set">
+                                                        <div id="error_amt0" style="font-size: 11px;color: red;"></div>
+        					</div>
+        				</div>
+                                        </div>
+                                    </div>
+        				<a href="javascript:void(0)" onclick="add_more_div()">+ Add Measurement</a>
+        			</div>
+<!--                                <div id="instruction_section" style="margin-top: 50px;min-height: 70px;">
+                                  <div class="descriptiohead"> <span>INSTRUCTIONS</span> </div>
+                                  <div class="descriptiotxt"> <textarea name="instruction" id="instruction" class=form-control></textarea><div id="ins_error" style="color:red"></div></div>
+                                </div>-->
+        		</div>
+                        <input type="hidden" name="count_image" id="count_image" value="0">
+                        <input type="hidden" name="count_div" id="count_div" value="0">
+                        <input type="hidden" name="uploaded_image_name" id="uploaded_image_name" value="">
+        		
+        		<div class="btns">
+        			<a href="javascript:void(0)" class="butsblue red" data-dismiss="modal">Cancel</a>
+        			<a href="javascript:void(0)" class="butsblue green" onclick="return meal_validation()">Add Meal</a>
+        		</div>
+        		
+        	</div>
+                </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
+<script>
+$(document).ready(function(){
+$("#meal_image").change(function()
+ {
+	//alert("check");
+    var src=$("#meal_image").val();
+    if(src!="")
+    {
+        formdata= new FormData();
+        var numfiles=this.files.length;
+        var i, file, progress, size;
+        for(i=0;i<numfiles;i++)
+        {
+        file = this.files[i];
+        size = this.files[i].size;
+        name = this.files[i].name;
+        if (file.type.match(/image.*/))
+        {
+        if((Math.round(size))<=(1024*1024))
+        {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = function(e){
+                var image = $('<img>').attr('src',e.target.result);
+                };
+                formdata.append("file[]", file);
+                if(i==(numfiles-1))
+                {
+                  $('#waiting_div').html('Please Wait while uploading......');
+                $.ajax({
+                        url: "<?php echo base_url(); ?>toolbox/image_upload",
+                        type: "POST",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        success: function(res){
+                          $('#waiting_div').html('');
+                          var str=res.substring(0, res.length-1);
+                          var array=str.split(',');
+                          for(var i=0;i < array.length;i++)
+                           {  
+                                var count_img=parseInt(document.getElementById('count_image').value);
+                                var new_count=count_img+1;
+                                var filename=array[i];
+                            	var iDiv = document.createElement('div');
+				var jDiv = document.createElement('div');
+                                var kDiv = document.createElement('img');
+                                var mDiv = document.createElement('div');
+				iDiv.className = 'uploadedsingle';
+                                jDiv.className = 'imguploaded';
+                                mDiv.className = 'Uptxt';
+                                mDiv.innerHTML='Picture'+new_count;
+                                kDiv.src= '<?php echo base_url();?>/meal_images/'+array[i];
+                                kDiv.style.height = '80px';
+				kDiv.style.width = '80px';
+                                iDiv.appendChild(jDiv);
+                                iDiv.appendChild(mDiv);
+                                jDiv.appendChild(kDiv);
+                                $("#main_img_div").append(iDiv);
+                                document.getElementById('count_image').value=new_count;
+                            }
+                            document.getElementById('uploaded_image_name').value=document.getElementById('uploaded_image_name').value+","+str;
+				if(res=="0")
+				{
+				   alert("Error in upload. Retry");
+				}
+                        }
+                        });
+                }
+        }
+        else
+        {
+		alert(name+"Size limit exceeded");
+		return;
+        }
+        }
+        else
+        {
+		alert(name+"Not a valid file");
+		return;
+        }
+        }
+    }
+    else
+    {
+    alert("Select a valid file");
+    return;
+    }
+    return false;
+});
+});
+</script>
+<a id="edit_hyper" href="javascript:void(0)" data-toggle="modal" data-target="#MEAL-INFORMATION-EDIT"></a>
+<div class="modal fade" id="MEAL-INFORMATION-EDIT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-left" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body" id="edit_form_body">
+<!--        <div class="row">
+           <form name="editMealForm<?php echo $meal['id'];?>" id="editMealForm<?php echo $meal['id'];?>" method="POST" action="" enctype="multipart/form-data">
+        	<div class="col-sm-6">
+        	    <div class="appoin_txt">MEAL INFORMATION</div>
+                    <div class="datehead"><input type="text" class=form-control name="meal_title_edit" id="meal_title_edit"><div id="title_error_edit" style="color:red;font-size: 14px;font-family: 'HelveticaNeue-Light';"></div></div>
+                    <div class="descriptiohead"> <span>DESCRIPTION</span> </div>
+                    <div class="descriptiotxt"> <textarea name="meal_desc_edit" id="meal_desc_edit" class=form-control ></textarea><div id="desc_error_edit" style="color:red"></div></div>
+                    <div class="descriptiohead"><span>PICTURES</span><b>Upload
+                      <input type="file" name="meal_image_edit[]" id="meal_image_edit" multiple="multiple">
+                    </b>
+                    </div>
+                    <div id="waiting_div"></div>
+                    <div class="uploadedpic" id="main_img_div">
+                    </div>
+        	</div>
+        	<div class="col-sm-6">
+        		<div class="appoin_txt">CUSTOMIZED MEAL</div>
+        		<div class="table-outer">
+        			<div class="rate-table">
+                                  <div id="main_repeat_div">
+                                    <div id="repeat_section" class="repeat-main">
+        				<div class="rate-table-row">
+        					<div class="rate-table-td labl-set">
+                                                  <span class="descriptiohead black-cl">
+        						Specifically
+                                                  </span>
+        					</div>
+                                                
+                                                <div class="rate-table-td text-right">
+        						<input type="text" name="specifically_edit[]" id="specifically_edit" class="form-control txt-box-set">
+        					</div>
+        				</div>
+                                        <div class="rate-table-row" style="float: right;"> 
+                                              <div class="rate-table-td text-right" style="padding-right: 0; font-size: 12px; cursor: pointer" onclick="remove_div_edit(this)">
+        						X<span class="descriptiohead">  Remove</span>
+        				      </div>
+                                        </div>
+        				<div class="rate-table-row" style="float: left;">
+        					<div class="rate-table-td labl-set" >
+        					  <span class="descriptiohead black-cl">
+        						Amount
+                                                  </span>
+        					</div>
+                                                <div class="rate-table-td text-right">
+        						<input type="text" name="meal_amount_edit[]" id="meal_amount_edit" class="form-control txt-box-set">
+        					</div>
+        				</div>
+                                        </div>
+                                    </div>
+        				<a href="javascript:void(0)" onclick="add_more_div()">+ Add Set</a>
+        			</div>
+                                <div id="instruction_section" style="margin-top: 50px;min-height: 70px;">
+                                  <div class="descriptiohead"> <span>INSTRUCTIONS</span> </div>
+                                  <div class="descriptiotxt"> <textarea name="instruction_edit" id="instruction_edit" class=form-control></textarea><div id="ins_error_edit" style="color:red"></div></div>
+                                </div>
+        		</div>
+                        <input type="hidden" name="count_image_edit" id="count_image_edit" value="0">
+                        <input type="hidden" name="uploaded_image_name_edit" id="uploaded_image_name_edit" value="">
+        		
+        		<div class="btns">
+        			<a href="javascript:void(0)" class="butsblue red" data-dismiss="modal">Cancel</a>
+        			<a href="javascript:void(0)" class="butsblue green" onclick="return meal_validation()">Add Meal</a>
+        		</div>
+        		
+        	</div>
+                </form>
+        </div>
+-->      </div>
+    </div>
+  </div>
+</div>  
+
+

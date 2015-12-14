@@ -1,0 +1,164 @@
+<?php
+class Network_model extends CI_Model {
+ 
+    /**
+    * Responsable for auto load the database
+    * @return void
+    */
+    public function __construct(){
+        $this->load->database();
+    }
+    
+    public function network_list(){
+        $this->db->select('*');
+	$this->db->from('network');
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    
+    public function get_user_information($user_id) /////Fetch User Details
+    {
+	$this->db->select('*');
+	$this->db->from('user');
+        $this->db->where('id',$user_id);
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    public function get_total_members($network_id)////Get total Number of members of a network
+    {
+	$this->db->select('*');
+	$this->db->from('network_member');
+        $this->db->where('network_id',$network_id);
+	$query = $this->db->get();
+	$fetch=$query->num_rows();
+	return $fetch;
+    }
+    
+    public function get_all_trainers()/////Get All trainer's information
+    {
+        $this->db->select('*');
+	$this->db->from('user');
+        $this->db->where('type','T');
+	$this->db->where('id !=',$this->session->userdata('site_user_id'));
+	$this->db->where('status','Y');
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    
+    public function get_network_member_details($network_id)
+    {
+	$this->db->select('*');
+        $this->db->from('network_member');
+	$this->db->where('user_id !=',$this->session->userdata('site_user_id'));
+        $this->db->where('network_id',$network_id);
+	$this->db->where('status','Y');
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    
+    public function check_member_existance($network_id,$user_id)
+    {
+      	$this->db->select('*');
+	$this->db->from('network_member');
+        $this->db->where('network_id',$network_id);
+        $this->db->where('user_id',$user_id);
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    public function delete_network($network_id)
+    {
+	$this->db->where('id',$network_id);
+	$this->db->delete('network');
+	$this->db->where('network_id',$network_id);
+	$this->db->delete('network_member');
+        $report = array();
+	$report['error'] = $this->db->_error_number();
+	$report['message'] = $this->db->_error_message();
+	if($report !== 0){
+	    return true;
+	}else{
+	    return false;
+	}
+    }
+    
+    public function get_other_networks($user_id)
+    {
+	$this->db->select('network.id as net_id,network_member.id as member_id,network.*,network_member.*');
+	$this->db->from('network');
+	$this->db->join('network_member','network.id=network_member.network_id');
+        $this->db->where('network.created_by !=',$user_id);
+        $this->db->where('network_member.user_id',$user_id);
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    
+    public function get_network_members($network_id,$user_id)
+    {
+	$this->db->select('*');
+	$this->db->from('network_member');
+        $this->db->where('network_id',$network_id);
+        $this->db->where('user_id !=',$user_id);
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    public function get_all_msg_sender()
+    {
+//	$this->db->select('*');
+//	$this->db->from('messages');
+//        $this->db->where('sent_to',$this->session->userdata('site_user_id'));
+//        $this->db->group_by('sent_by');
+//	$this->db->order_by('send_time','ASC');
+//	$query = $this->db->get();
+//	$fetch=$query->result_array();
+//	return $fetch;
+         $query=$this->db->query("(SELECT * FROM `messages` WHERE sent_by='".$this->session->userdata('site_user_id')."') UNION (SELECT * FROM `messages` WHERE sent_to='".$this->session->userdata('site_user_id')."') order by send_time desc");
+	 //$query=$this->db->get();
+	 //echo $query;
+	 $fetch=$query->result_array();
+	 return $fetch;
+    }
+    public function get_last_chat($sender)
+    {
+	$this->db->select('*');
+	$this->db->from('messages');
+	$where="(`sent_by`='".$this->session->userdata('site_user_id')."' AND `sent_to`='".$sender."') OR (`sent_by`='".$sender."' AND `sent_to`='".$this->session->userdata('site_user_id')."')";
+	$this->db->where($where);
+	$this->db->order_by('send_time','DESC');
+	$this->db->limit(1,0);
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    public function last_most_message_info()
+    {
+	$this->db->select('*');
+	$this->db->from('messages');
+        $this->db->where('sent_to',$this->session->userdata('site_user_id'));
+	$this->db->or_where('sent_by',$this->session->userdata('site_user_id'));
+        $this->db->group_by('sent_by');
+	$this->db->order_by('send_time','ASC');
+	$this->db->limit(1,0);
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+    public function get_latest_user_messages($sender)
+    {
+        $this->db->select('*');
+	$this->db->from('messages');
+	$where="(`sent_by`='".$this->session->userdata('site_user_id')."' AND `sent_to`='".$sender."') OR (`sent_by`='".$sender."' AND `sent_to`='".$this->session->userdata('site_user_id')."')";
+	$this->db->where($where);
+	$this->db->order_by('send_time','ASC');
+	$query = $this->db->get();
+	$fetch=$query->result_array();
+	return $fetch;
+    }
+}
+?>

@@ -1,0 +1,633 @@
+<?php
+class App_control extends CI_Controller {
+
+	public function __construct()
+	{
+		parent::__construct();
+		
+		// load models
+		$this->load->model('sitesetting_model');
+		$this->load->model('contactsetting_model');
+		$this->load->model('common_model');
+		$this->load->model('network_model');
+		$this->load->model('trainer_model');
+		$this->load->model('toolbox_model');
+		$this->load->model('app_model');
+	}
+        public function get_total_unread_message()  /////Json for getting counter of total unread messages
+        {
+            if ($this->input->server('REQUEST_METHOD') === 'GET')
+		{
+                   $sent_to=$this->input->get('logged_in_user');
+                   $data_msg = array(
+			'sent_to' => $sent_to,
+			'read_status' => 'N'
+			  );
+                   $msg=$this->common_model->get('messages',array('*'),$data_msg);
+                   $data['unread_message'] =  count($msg);
+                   echo $jsonhtml=json_encode($data);
+                }
+		
+        }
+        
+        /// json for fetching unread messages for a user when his respective chatbox is open and message status getting changed as read after that
+        
+        public function get_instant_message() 
+        {
+             if ($this->input->server('REQUEST_METHOD') === 'GET')
+		{
+                     $sent_to=$this->input->get('logged_in_user');
+                     $sent_by=$this->input->get('chat_user_id');
+                     $data=array();
+                      $data_msg = array(
+			'sent_to' => $sent_to,
+                        'sent_by' => $sent_by,
+			'read_status' => 'N'
+			  );
+                       $unread_msg=$this->common_model->get('messages',array('*'),$data_msg);
+                       foreach($unread_msg as $msg)
+                       {
+                                $where_sender=array(
+				'id' => $msg['sent_by']
+					  );
+			        $sender_info= $this->common_model->get('user',array('*'),$where_sender);///Fetching sender information
+				$where_receiver=array(
+				'id' => $msg['sent_to']
+					  );
+			        $receiver_info= $this->common_model->get('user',array('*'),$where_receiver);///fetching receiver information
+				$msg['id']=$msg['id'];
+				$msg['message']=$msg['message'];
+				$msg['sender']=$sender_info[0]['name'];
+				$msg['receiver']=$receiver_info[0]['name'];
+				$msg['sender_image'] =  base_url().'user_images/'.$sender_info[0]['image'];
+			        $msg['receiver_image'] = base_url().'user_images/'.$receiver_info[0]['image'];
+				$msg['send_time']=$msg['send_time'];
+				$msg['status']=$msg['read_status'];
+				$data['unread_message'][]=$msg;
+                       }
+                       $data_to_updt=array(
+                          'read_status' =>'Y'
+                                           );
+                       $status=$this->network_model->update_message_read_status_app($sent_by,$sent_to,$data_to_updt);
+                       echo $jsonhtml=json_encode($data); 
+                }
+        }
+        public function user_details(){ ////Json fro fetching client details
+            
+             if ($this->input->server('REQUEST_METHOD') === 'GET')
+		{
+                     $user_id=$this->input->get('pt_id');
+                     $data=array();
+                     $where=array(
+			'id' => $user_id
+			     );
+                     $user_details= $this->common_model->get('user',array('*'),$where);
+                     if(count($user_details) > 0)
+                     {
+                        if($user_details[0]['type']=='T')
+                        {
+                              //$where_trainer=array(
+                              //   'id' => $user_details[0]['created_by']
+                              //        );
+                              //$trainer_details= $this->common_model->get('user',array('*'),$where_trainer);
+                              $data['id']=$user_details[0]['id'];
+                              $data['user_type']=$user_details[0]['type'];
+                              //$data['created_by_id']=$user_details[0]['created_by'];
+                              //$data['created_by_name']=$trainer_details[0]['name'];
+                              $data['name']=$user_details[0]['name'];
+                              //$data['image']=$user_details[0]['image'];
+                              $data['image']=base_url().'user_images/'.$user_details[0]['image'];
+                              $data['email']=$user_details[0]['email'];
+                              $data['address']=$user_details[0]['address'];
+                              $data['company']=$user_details[0]['company'];
+                              $data['work_address']=$user_details[0]['work_address'];
+                              $data['billing_address']=$user_details[0]['billing_address'];
+                              $data['phone']=$user_details[0]['phone'];
+                              $data['about']=$user_details[0]['about'];
+                              //$data['deleted_status']=$user_details[0]['about'];
+                        }
+                     }
+                      echo $jsonhtml=json_encode($data);
+                }
+        }
+        
+        public function get_pt_list(){  ///Json for getting list of trainers
+            
+             if ($this->input->server('REQUEST_METHOD') === 'GET')
+		{
+                     $user_id=$this->input->get('logged_in_user');
+                     $where_user=array(
+			'id' => $user_id
+			     );
+                     $user_details= $this->common_model->get('user',array('*'),$where_user);
+                     $trainer_array=array();
+                     array_push($trainer_array,$user_details[0]['created_by']);
+                     $where_network=array(
+			'user_id' => $user_id
+			     );
+                     $network= $this->common_model->get('network_member',array('*'),$where_network);
+                     foreach($network as $nt)
+                     {
+                        $member=$this->network_model->get_network_members($nt['network_id'],$user_id);
+                        foreach($member as $mem)
+                        {
+                            if($mem['user_id'] != 0)
+                            {
+                                $where_trainer=array(
+                                 'id' => $member['user_id']
+                                      );
+                                $trainer_details= $this->common_model->get('user',array('*'),$where_trainer);
+                                if($trainer_details[0]['type']=='T'){
+                                    if(!in_array($trainer_details[0]['id'], $trainer_array))
+                                    {
+                                        array_push($trainer_array,$trainer_details[0]['id']);
+                                    }
+                                }
+                            }
+                        }
+                     }
+                     print_r($trainer_array);die();
+                     //$pt_list= $this->common_model->get('user',array('*'),$where);
+                     foreach($pt_list as $pt)
+                     {
+                        $info['id']=$pt['id'];
+                        $info['name']=$pt['name'];
+                        $info['image']=base_url().'user_images/'.$pt['image'];
+                        $info['email']=$pt['email'];
+                        $info['company']=$pt['company'];
+                        $info['address']=$pt['address'];
+                        $info['work_address']=$pt['work_address'];
+                        $info['billing_address']=$pt['billing_address'];
+                        $info['phone']=$pt['phone'];
+                        $info['about']=$pt['about'];
+                        $data['pt_info'][]=$info;
+                     }
+                   
+                    echo $jsonhtml=json_encode($data);
+                }
+        }
+	
+	public function get_date_respective_diary()/////Json for getting date respective diary details of a logged in client
+	{
+		 if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$client_id=$this->input->get('logged_in_user');
+			$date_val=date('Y-m-d',strtotime($this->input->get('date_val')));
+			$data=array();
+			$where_user=array(
+			'id' => $client_id
+			     );
+			$client_info=$this->common_model->get('user',array('*'),$where_user);
+			$diary_details=$this->app_model->get_date_respective_client_diary_details($client_id,$date_val);
+			if(count($diary_details) > 0){
+				if($client_info[0]['deleted_status']!='Y')
+				{
+					$data['client_id']=$client_info[0]['id'];
+					$data['client_name']=$client_info[0]['name'];
+					$data['client_image']=base_url().'user_images/'.$client_info[0]['image'];
+					$data['client_email']=$client_info[0]['email'];
+					$data['client_about']=$client_info[0]['about'];
+					$data['diary_id']=$diary_details[0]['id'];
+					$data['diary_heading']=$diary_details[0]['diary_heading'];
+					$data['dairy_text']=htmlspecialchars($diary_details[0]['dairy_text']);
+					
+					
+				}
+			}
+			 echo $jsonhtml=json_encode($data);
+		  }
+	}
+	
+	public function add_date_respective_diary(){ //Json for adding date respective diary details
+		
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$client_id=$this->input->get('logged_in_user');
+			$date_val=date('Y-m-d',strtotime($this->input->get('date_val')));
+			$diary_heading=$this->input->get('diary_heading');
+			$diary_text=$this->input->get('diary_text');
+			$data=array();
+			$diary_details=$this->app_model->get_date_respective_client_diary_details($client_id,$date_val);
+			if(count($diary_details) == 0){
+				$data_to_add=array(
+					'client_id' => $client_id,
+					'date_val' => $date_val,
+					'diary_heading' => $diary_heading,
+					'dairy_text' => $diary_text
+						   );
+				$add_diary=$this->common_model->add('user_diary',$data_to_add);
+				if($add_diary !=0)
+				{
+					$diary_where=array(
+						'id' => $add_diary
+							 );
+					$diary_info = $this->common_model->get('user_diary',array('*'),$diary_where);
+					$data['diary_id']=$diary_info[0]['id'];
+					$data['diary_date']=$diary_info[0]['date_val'];
+					$data['diary_heading']=$diary_info[0]['diary_heading'];
+					$data['diary_text']=$diary_info[0]['dairy_text'];
+				}
+			}
+			 echo $jsonhtml=json_encode($data);
+		  }
+	}
+	
+	public function fetch_particular_diary_record(){ ////Json for getting info about a particular diary record
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$diary_id=$this->input->get('diary_id');
+			$data=array();
+			$where_diary=array(
+			'id' => $diary_id
+			     );
+			$diary_info=$this->common_model->get('user_diary',array('*'),$where_diary);
+			if(count($diary_info) > 0){
+				$data['diary_id']=$diary_info[0]['id'];
+                                $data['diary_date']=$diary_info[0]['date_val'];
+				$data['diary_heading']=$diary_info[0]['diary_heading'];
+				$data['dairy_text']=$diary_info[0]['dairy_text'];
+			}
+			 echo $jsonhtml=json_encode($data);
+		  }
+		
+	}
+	
+	public function update_a_diary(){   ////Json for updating a particular diary details
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$diary_id=$this->input->get('diary_id');
+			$new_heading=$this->input->get('diary_heading');
+			$new_diary_text=$this->input->get('diary_text');
+			$data_to_update=array(
+				'diary_heading' => $new_heading,
+				'dairy_text' => $new_diary_text	
+			);
+			$where_diary=array(
+				'id' => $diary_id
+					   );
+			$update_diary=$this->common_model->update('user_diary',$data_to_update,$where_diary);
+			if($update_diary)
+			{
+				$diary_where=array(
+					'id' => $diary_id
+						 );
+				$diary_info = $this->common_model->get('user_diary',array('*'),$diary_where);
+				$data['diary_id']=$diary_info[0]['id'];
+				$data['diary_date']=$diary_info[0]['date_val'];
+				$data['diary_heading']=$diary_info[0]['diary_heading'];
+				$data['diary_text']=$diary_info[0]['dairy_text'];
+			}
+			 echo $jsonhtml=json_encode($data);
+		  }
+		
+	}
+	public function date_respective_client_meal(){ ////Json for getting date respective meal list and meal details of a client
+		
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$client_id=$this->input->get('logged_in_user');
+			$date_val=date('Y-m-d',strtotime($this->input->get('date_val')));
+                        $meal_details=$this->app_model->get_date_respective_meal_details($client_id,$date_val);
+			$data=array();
+			foreach($meal_details as $meal){
+				
+				$where_meal=array(
+				'id' => $meal['meal_id']
+					   );
+				$meal_info=$this->common_model->get('meal',array('*'),$where_meal);
+				$meal_image=$this->toolbox_model->get_meal_images($meal_info[0]['id']);
+				$meal_arr['meal_id']=$meal_info[0]['id'];
+				$meal_arr['custom_meal_id']=$meal['id'];
+				$meal_arr['meal_title']=$meal_info[0]['title'];
+				$meal_arr['meal_description']=$meal_info[0]['description'];
+				if(count($meal_image) > 0){
+				        $meal_arr['meal_image']=base_url().'meal_images/'.$meal_image[0]['filename'];
+				}
+				else{
+					$meal_arr['meal_image']=base_url().'assets/site/after_login/images/no-image.gif';
+				}
+				
+				$data['meal'][]=$meal_arr;
+			}
+			echo $jsonhtml=json_encode($data);
+		  }
+	}
+	
+	public function get_custom_meal_details(){
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$meal_date_id=$this->input->get('custom_meal_id');
+			$client_id=$this->input->get('client_id');
+			$meal_id=$this->input->get('meal_id');
+			$data=array();
+			$where_meal=array(
+			'meal_dates_id' => $meal_date_id,
+			'client_id' => $client_id
+				   );
+			$custom_meal_info=$this->common_model->get('user_custom_meal',array('*'),$where_meal);
+			$where=array(
+				'id' => $meal_id
+				);
+			$meal_info=$this->common_model->get('meal',array('*'),$where);
+			$meal_image=$this->toolbox_model->get_meal_images($meal_id);
+			if(count($custom_meal_info) > 0){
+				$set_val=explode(',',$custom_meal_info[0]['set_value']);
+				foreach($set_val as $set){
+				  $option_arry=explode('#@#@',$set);
+				  $specifically=$option_arry[0];
+				  $amount=$option_arry[1];
+				  $all_option['specifically']=$specifically;
+				  $all_option['amount']=$amount;
+				  $meal_set_option[]=$all_option;
+				}
+			}
+			else
+			{
+				$where=array(
+					'meal_id' => $meal_id
+					);
+				$custom_set=$this->common_model->get('meal_other_options',array('*'),$where);
+				foreach($custom_set as $set)
+				{
+					$all_option['specifically']=$set['specifically'];
+					$all_option['amount']=$set['amount'];
+					$meal_set_option[]=$all_option;
+				}
+			}
+				$data['meal_title']=$meal_info[0]['title'];
+				$data['meal_image']=base_url().'meal_images/'.$meal_info[0]['description'];
+				if(count($meal_image) > 0){
+					$data['meal_image']=base_url().'meal_images/'.$meal_image[0]['filename'];
+					}
+				else{
+					$data['meal_image']=base_url().'assets/site/after_login/images/no-image.gif';
+				}
+				$data['meal_description']=$meal_info[0]['description'];
+				$data['set']=$meal_set_option;
+			echo $jsonhtml=json_encode($data);
+		  }
+	}
+	
+	
+	public function get_all_events_for_date(){
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			
+			$client_id=$this->input->get('client_id');
+			$date_val=$this->input->get('date_val');
+			$data=array();
+			$where_meal=array(
+			'client_id' => $client_id,
+			'workout_date' => date("Y-m-d",strtotime($date_val))
+				   );
+			$total_meal=$this->common_model->get('user_meal_dates',array('*'),$where_meal);
+			$data['total_meal'] = count($total_meal);
+			$data['total_appointment'] = 0;
+			$where_meal=array(
+			'client_id' => $client_id,
+			'date_val' => date("Y-m-d",strtotime($date_val))
+				   );
+			$total_diary=$this->common_model->get('user_diary',array('*'),$where_meal);
+			if(isset($total_diary[0]['dairy_text']))
+			{
+				$data['diary_text'] = $total_diary[0]['dairy_text'];
+			}
+			else{
+				$data['diary_text'] = '';
+			}
+			
+			
+			$where_meal=array(
+			'client_id' => $client_id,
+			'workout_date' => date("Y-m-d",strtotime($date_val))
+				   );
+			$total_programs=$this->common_model->get('user_program_exercises',array('*'),$where_meal);
+			$finished = 0;
+			$finished_exer = 0;
+			$tot_exer = 0;
+			$all_exer = array();
+			foreach($total_programs as $programs)
+			{
+				
+				$where_meal_ex=array(
+				'user_program_id' => $programs['id'],
+				'client_id' => $client_id
+					   );
+				$total_exercise=$this->common_model->get('user_program_ex_exercise',array('*'),$where_meal_ex);
+				$tot_exer += count($total_exercise);
+				
+				foreach($total_exercise as $exer)
+				{
+					$exer_detail = array();
+					$exer_detail['user_program_id'] = $programs['id'];
+					$where_meal_ex_each=array(
+					'user_program_id' => $programs['id'],
+					'client_id' => $client_id,
+					'exercise_id' => $exer['exercise_id']
+						   );
+					$exer_custom=$this->common_model->get('user_custom_exercise',array('*'),$where_meal_ex_each);
+					
+					$where_fet_exer_det=array(
+					'id' => $exer['exercise_id']
+						   );
+					$exer_details=$this->common_model->get('exercise_list',array('*'),$where_fet_exer_det);
+					$exer_detail['exercise_id'] = $exer['exercise_id'];
+					$exer_detail['exercise_title'] = $exer_details[0]['title'];
+					if(count($exer_custom) > 0)
+					{
+						$set_val = $exer_custom[0]['set_value'];
+						$exp_val = explode(",",$set_val);
+						$each_set = array();
+						$set = array();
+						foreach($exp_val as $each_val)
+						{
+							$val_Set = explode("#@#@",$each_val);
+							$reps =  $val_Set[0];
+							$kg = $val_Set[1];
+							$each_set['reps'] = $reps;
+							$each_set['kg'] = $kg;
+							$set[] = $each_set;
+						}
+						$exer_detail['exercise_sets'] = $set;
+						$exer_detail['instruction'] = $exer_custom[0]['instruction'];
+					}
+					else{
+						$each_set = array();
+						$set = array();
+						$each_set['reps'] = 0;
+						$each_set['kg'] = 0;
+						$set[] = $each_set;
+						$exer_detail['exercise_sets'] = $set;
+						$exer_detail['instruction'] = '';
+					}
+					
+					if($exer['status'] == 'F')
+					{
+						$finished_exer++;
+					}
+					$all_exer[] = $exer_detail;
+					
+				}
+				
+				if($programs['status'] == 'F')
+				{
+					$finished++;
+				}
+			}
+			
+			$data['total_training_exercises'] = $tot_exer;
+			$data['total_training_exercise_finished'] = $finished_exer;
+			$data['total_training_programs'] = count($total_programs);
+			$data['total_training_programs_finished'] = $finished;
+			$data['all_exercises'] = $all_exer;
+			//echo "<pre>";
+			//print_r($data);
+			//echo "</pre>";
+			echo $jsonhtml=json_encode($data);
+		  }
+	}
+	
+	public function get_particular_exercise_details(){
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$user_program_id = $this->input->get('user_program_id');
+			$client_id = $this->input->get('client_id');
+			$exercise_id = $this->input->get('exercise_id');
+			$where_meal_ex_each=array(
+			'user_program_id' => $user_program_id,
+			'client_id' => $client_id,
+			'exercise_id' => $exercise_id
+				   );
+			$exer_custom=$this->common_model->get('user_custom_exercise',array('*'),$where_meal_ex_each);
+			$exer_detail = array();		
+			$where_fet_exer_det=array(
+			'id' => $exercise_id
+				   );
+			$exer_details=$this->common_model->get('exercise_list',array('*'),$where_fet_exer_det);
+			$data['exercise_id'] = $exercise_id;
+			$data['exercise_title'] = $exer_details[0]['title'];
+			$data['exercise_description'] = $exer_details[0]['description'];
+			$media_image = 'https://exorlive.com/media_'.$exer_details[0]['image_id'].'@600.300.media';
+			$media_video = 'https://exorlive.com/video/?ex='.$exer_details[0]['exercise_id'];
+			$data['exercise_image'] = $media_image;
+			$data['exercise_video'] = $media_video;
+			if(count($exer_custom) > 0)
+			{
+				$set_val = $exer_custom[0]['set_value'];
+				$exp_val = explode(",",$set_val);
+				$each_set = array();
+				$set = array();
+				foreach($exp_val as $each_val)
+				{
+					$val_Set = explode("#@#@",$each_val);
+					$reps =  $val_Set[0];
+					$kg = $val_Set[1];
+					$each_set['reps'] = $reps;
+					$each_set['kg'] = $kg;
+					$set[] = $each_set;
+				}
+				$data['exercise_sets'] = $set;
+				$data['instruction'] = $exer_custom[0]['instruction'];
+			}
+			else{
+				$each_set = array();
+				$set = array();
+				$each_set['reps'] = 0;
+				$each_set['kg'] = 0;
+				$set[] = $each_set;
+				$data['exercise_sets'] = $set;
+				$data['instruction'] = '';
+			}
+			$where_meal_ex=array(
+				'user_program_id' => $user_program_id,
+				'client_id' => $client_id,
+				'exercise_id' => $exercise_id
+					   );
+			$exer=$this->common_model->get('user_program_ex_exercise',array('*'),$where_meal_ex);
+			if($exer[0]['status'] == 'F')
+			{
+				$data['finished'] = 'TRUE';
+			}
+			else{
+				$data['finished'] = 'FALSE';
+			}
+			echo $jsonhtml=json_encode($data);
+		  }
+	}
+	
+	public function update_finish_status(){
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$user_program_id = $this->input->get('user_program_id');
+			$client_id = $this->input->get('client_id');
+			$exercise_id = $this->input->get('exercise_id');
+			
+			
+			$where_meal_ex=array(
+				'user_program_id' => $user_program_id,
+				'client_id' => $client_id,
+				'exercise_id' => $exercise_id
+					   );
+			$data_to_update=array(
+				'status' => 'F'
+			);
+			$exer=$this->common_model->update('user_program_ex_exercise',$data_to_update,$where_meal_ex);
+			
+			$where_meal_ex_each=array(
+			'user_program_id' => $user_program_id,
+			'client_id' => $client_id,
+			'status' => 'UF'
+				);
+			
+			$check_rem=$this->common_model->get('user_program_ex_exercise',array('*'),$where_meal_ex_each);
+			
+			if(count($check_rem) == 0)
+			{
+				$where_meal_ex_val=array(
+				'id' => $user_program_id,
+				'client_id' => $client_id
+					   );
+				$data_to_update=array(
+					'status' => 'F'
+				);
+				$exer_main=$this->common_model->update('user_program_exercises',$data_to_update,$where_meal_ex_val);
+			}
+			
+			if($exer)
+			{
+				$data['finished'] = 'TRUE';
+			}
+			else{
+				$data['finished'] = 'FALSE';
+			}
+			echo $jsonhtml=json_encode($data);
+		  }
+	}
+	
+	public function mark_calender(){
+		if ($this->input->server('REQUEST_METHOD') === 'GET')
+		  {
+			$client_id=$this->input->get('client_id');
+			$data=array();
+			$prog_res=$this->app_model->get_marked_calender_exercise($client_id);
+			$meal_res=$this->app_model->get_marked_meal_dates($client_id);
+			$diary_res=$this->app_model->get_marked_diary($client_id);
+			foreach($prog_res as $prog)
+			{
+			   $data['program_date'][]=$prog['workout_date'];
+			}
+			foreach($meal_res as $meal){
+				
+			   $data['meal_date'][]=$meal['workout_date'];
+			}
+			foreach($diary_res as $diary){
+				
+			   $data['diary_date'][]=$diary['date_val'];
+			}
+			 $data['appointment']=array();
+			echo $jsonhtml=json_encode($data);
+		  }
+	}
+	
+}
+?>

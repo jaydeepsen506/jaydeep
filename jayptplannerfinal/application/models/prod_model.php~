@@ -1,0 +1,18 @@
+<?php
+
+
+
+
+class prod_model extends CI_Model {
+    public function __construct()
+    {
+        $this->load->database();
+    }
+    function view_store()
+    {
+        $this->db->select('*')->from('store');
+        $r=$this->db->get();
+        return $r->result_array();
+    }
+}
+?>

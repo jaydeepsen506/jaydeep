@@ -1,5 +1,5 @@
 <?php
-
+Exist at server end
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

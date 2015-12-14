@@ -1,5 +1,9 @@
 <?php
+<<<<<<< HEAD
 Exist at client end
+=======
+Exist at server end
+>>>>>>> 194c5fd9c7b5bcb51ac4737be64946b4a7e7fdab
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

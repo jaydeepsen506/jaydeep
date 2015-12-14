@@ -1,6 +1,6 @@
 <?php
 
-echo "at client end";
+echo "a client end";
 include('database.php');
 $email_id=$_REQUEST['email_id'];
 $select="select * from user where email='".$email_id."'";
